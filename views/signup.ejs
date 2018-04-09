@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="container center-align">
+  <div class="row">
+      <h2>Sign Up</h2>
+      <li><a href='/'>Home</a></li>
+      <li><a href='/portfolio'>Portfolio</a></li>
+      <li><a href='/favorites'>Favorites</a></li>
+      <li><a href='/forums'>Forums</a></li>
+      <li><a href='/news'>News</a></li>
+      <% if (user.users == undefined) { %>
+      <li><a href='/signup'>Sign Up</a></li>
+      <li><a href='/login'>Log In</a></li>
+      <%  } else { %>
+      <li><a href='/user/<%= user.users.id.toString() %>'>Profile</a></li>
+      <li><a href='/logout'>Logout</a></li>
+      <%  } %>
+      <br>
+      <form method="POST" action="/signup">
+        <div class="col s10 offset-s1">
+          <input type="email" name="username" class="validate invalid" placeholder="Email">
+        </div>
+        <div class="col s10 offset-s1">
+          <input type="password" name="password" class="validate" placeholder="Password">
+        </div>
+        <div class="center-align">
+          <input type="submit" class="waves-effect waves-light btn" value="Sign Up">
+        </div>
+        <br>
+      </form>
+  </div>
+</div>
+  </body>
+</html>

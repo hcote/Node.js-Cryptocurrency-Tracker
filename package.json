@@ -1,0 +1,28 @@
+{
+  "name": "change",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.0.3",
+    "materialize-css": "^0.100.2",
+    "method-override": "^2.3.10",
+    "mongoose": "^5.0.10",
+    "nodemon": "^1.17.1",
+    "npm": "^5.7.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^4.4.0",
+    "request": "^2.65.0"
+  }
+}

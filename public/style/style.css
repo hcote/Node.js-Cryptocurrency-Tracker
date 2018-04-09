@@ -1,0 +1,40 @@
+header {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #2f4454;
+  height: 10em;
+  padding: 1em;
+  color: white;
+  margin-bottom: 4.5em;
+}
+
+li {
+  display: inline;
+  margin-left: .4em;
+  margin-right: .4em
+}
+
+ul {
+  padding: 0;
+}
+
+.hamburger {
+  display: none;
+}
+
+
+a {
+  list-style-type: none;
+  text-decoration: none;
+  color: #FFF;
+  padding: .25em .7em;
+  box-shadow: 0 0 8px 2px #888;
+}
+
+
+a:hover {
+  background-color: #DA7B93;
+  box-shadow: 0 0 8px 2px #DA7B93;
+}

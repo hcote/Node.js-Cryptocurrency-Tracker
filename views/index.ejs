@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/style/style.css">
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/scripts/app.js" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <header class="App-header">
+      <div>
+        <h1 class="App-title">App Title Here</h1>
+      </div>
+      <ul>
+        <li><a href='/'>Home</a></li>
+        <li><a href='/portfolio'>Portfolio</a></li>
+        <li><a href='/favorites'>Favorites</a></li>
+        <li><a href='/forums'>Forums</a></li>
+        <li><a href='/news'>News</a></li>
+        <% if (user.users == undefined) { %>
+        <li><a href='/signup'>Sign Up</a></li>
+        <li><a href='/login'>Log In</a></li>
+        <%  } else { %>
+        <li><a href='/user/<%= user.users.id.toString() %>'>Profile</a></li>
+        <li><a href='/logout'>Logout</a></li>
+        <%  } %>
+
+      </ul>
+    </header>
+
+    <table>
+      <tbody class="tbl_header">
+        <tr>
+           <th className="tableHeader">Rank</th>
+           <th className="tableHeader">Name</th>
+           <th className="tableHeader">Symbol</th>
+           <th className="tableHeader">Price $</th>
+           <th className="tableHeader">Price BTC</th>
+           <th className="tableHeader">Market Cap</th>
+           <th className="tableHeader">Percent Change 1 Day</th>
+           <th className="tableHeader">Percent Change 7 Days</th>
+           <th className="tableHeader">Favorite</th>
+        </tr>
+        <tr>
+          <td class="rank"></td>
+          <td class="name"></td>
+          <td class="symbol"></td>
+          <td class="price_use"></td>
+          <td class="price_btc"></td>
+          <td class="volume"></td>
+          <td class="mktcap"></td>
+          <td class="pctOneDay"></td>
+          <td class="pctOneWeek"></td>
+          <td class="more"></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.js" charset="utf-8"></script>
+  </body>
+</html>
