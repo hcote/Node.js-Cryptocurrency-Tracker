@@ -43,115 +43,51 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-// HOMEPAGE ROUTE - is there a way to refactor routes requiring permission to be DRY
-// app.get("/", function (req, res) {
-//       var user = req.user
-//       if (req.user == undefined) {
-//         console.log(`Req.user = ${req.user}`);
-//         User.find(function(err, userFound) {
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             console.log('getting this');
-//             axios.get('https://api.coinmarketcap.com/v1/ticker/')
-//               .then(function(res) {
-//                 Coin.remove({}, function(err, succ){
-//                   console.log(succ);
-//                 });
-//                   // console.log(`axios response: ${res.data[7].name}`);
-//                 for (i=0; i < res.data.length; i++) {
-//                   Coin.create({
-//                     username: [i],
-//                     symbol: res.data[i].symbol,
-//                     name: res.data[i].name,
-//                     price_usd: res.data[i].price_usd,
-//                     price_btc: res.data[i].price_btc,
-//                     qty: 1
-//                   })
-//                 }
-//               })
-//               .catch(function(err) {
-//                 console.log(err);
-//               })
-//         }
-//       })} else {
-//         var id = req.user._id
-//         console.log(`Req.user = ${req.user}`);
-//         User.find(function(err, userFound) {
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             console.log('getting this');
-//             axios.get('https://api.coinmarketcap.com/v1/ticker/')
-//               .then(function(res) {
-//                   // console.log(`axios response: ${res.data[7].name}`);
-//                 for (i=0; i < res.data.length; i++) {
-//                   Coin.create({
-//                     symbol: res.data[i].symbol,
-//                     name: res.data[i].name,
-//                     price_usd: res.data[i].price_usd,
-//                     price_btc: res.data[i].price_btc,
-//                     qty: 1
-//                   })
-//                 }
-//               })
-//               .catch(function(err) {
-//                 console.log(err);
-//           })
-//         }
-//       })
-//   }});
-
+// CHECK
 app.get('/', function(req, res) {
-    axios.get('https://api.coinmarketcap.com/v1/ticker/')
-         .then(function(response) {
-           console.log(`Response: ${response.status}`);
-           Coin.create(response.data, function(err, coinsCreated) {
-             if (err) {
-               console.log(err);
-             } else {
-                  console.log(`Coins: ${coinsCreated}`);
-             }
-           })
-           res.render('index')
-         })
-         .catch(function(err) {
-           console.log(err);
-           })
-})
+    // axios.get('https://api.coinmarketcap.com/v1/ticker/')
+    //      .then(function(response) {
+    //        console.log(`Response: ${response.status}`);
+    //        Coin.create(response.data, function(err, coinsCreated) {
+    //          if (err) {
+    //            console.log(err);
+    //          } else {
+    //               console.log(`Coins: ${coinsCreated}`);
+    //          }
+    //        })
+    //      })
+    //      .catch(function(err) {
+    //        console.log(err);
+    //     })
+    console.log(req.user);
+        res.render('index', {user: req.user})
+      })
 
-function handleCoins(json) {
-  Coin.create(json, function(err, coinsCreated) {
-    console.log(coinsCreated);
+// CHECK
+app.get("/portfolio/:id", function (req, res) {
+  var userId = req.params.id;
+  User.findById(userId, function(err, succ) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("portfolio", {user: succ});
+    }
   })
-}
+});
 
-app.get("/portfolio", function (req, res) {
-        var user = req.user
-        if (req.user == undefined) {
-          console.log(`Req.user = ${req.user}`);
-          User.find(function(err, userFound) {
-            if (err) {
-              console.log(err);
-            } else {
-              res.render("portfolio", {user: user, id: id});
-            }
-          })
-        } else {
-          var id = req.user._id
-          console.log(`Req.user = ${req.user}`);
-          User.find(function(err, userFound) {
-            if (err) {
-              console.log(err);
-            } else {
-              res.render("portfolio", {user: user, id: id});
-            }
-          })
-        }
-    });
+// Portfolio if not signed in
+// app.get("/portfolio/", function (req, res) {
+//   var userId = req.user
+//   User.findById(userId, function(err, succ) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       res.render("portfolio", {user: succ});
+//     }
+//   })
+// });
 
-    app.get("/favorites", function (req, res) {
+app.get("/favorites", function (req, res) {
           var user = req.user
           if (req.user == undefined) {
             console.log(`Req.user = ${req.user}`);
@@ -220,27 +156,7 @@ app.get("/login", function (req, res) {
   res.render("login");
 });
 
-// Render Map & allow it to access User model to populate div
-app.get('/feed', function(req, res) {
-  User.find(function(err, allUsers) {
-    if (err) {
-      console.log("Error getting all Users: " +  err);
-    } else {
-      console.log(req);
-      var Id = req.user._id;
-      User.findById(Id, function(err, succ) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.render('feed', {users: allUsers, user: succ})
-        }
-      })
-
-    }
-  })
-})
-
-// See all users
+// CHECK
 app.get('/all', function(req, res) {
   User.find(function(err, allUsers) {
     if (err) {
@@ -258,7 +174,7 @@ app.get('/all', function(req, res) {
   })
 })
 
-// SIGNUP WORKING
+// CHECK
 app.post("/signup", function (req, res) {
   console.log(req.body);
   User.register(new User({ username: req.body.username,
@@ -318,7 +234,6 @@ app.get('/user/:id', function(req, res) {
             res.render('coin_show', {coin: succ, user: users})
           }
         })
-
       }
     })
   })

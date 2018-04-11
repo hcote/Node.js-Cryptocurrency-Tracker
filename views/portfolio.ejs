@@ -21,12 +21,13 @@
         <li><a class="navLink" href='/signup'>Sign Up</a></li>
         <li><a class="navLink" href='/login'>Log In</a></li>
         <%  } else { %>
-        <li><a class="navLink" href='/user/'>Profile</a></li>
+        <li><a class="navLink" href='/user/<%= user._id.toString()%>'>Profile</a></li>
         <li><a class="navLink" href='/logout'>Logout</a></li>
         <%  } %>      </ul>
     </header>
     <% if (user) { %>
       <p>You are authorized to ake a portfolio</p>
+      <p>Loop through the localhost/all users coins and display the table exactly as it is on the home page</p>
     <% } else { %>
       <p>You must sign in to access this feature</p>
       <% } %>

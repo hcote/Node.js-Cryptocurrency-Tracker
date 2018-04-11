@@ -17,16 +17,29 @@
 
       <div>
         <h1 class="App-title">App Title Here</h1>
+        <% if (user == undefined) { %>
+          <h3>Welcome</h3>
+          <%  } else { %>
+        <h3>Hello <%= user._id %></h3>
+        <%  } %>
       </div>
       <ul>
         <li><a class="navLink" href='/'>Home</a></li>
-        <li><a class="navLink" href='/portfolio'>Portfolio</a></li>
+        <% if (user == undefined) { %>
+        <li><a class="navLink" href='/portfolio/>'>Portfolio</a></li>
+        <%  } else { %>
+        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>Portfolio</a></li>
+        <%  } %>
         <li><a class="navLink" href='/favorites'>Favorites</a></li>
         <li><a class="navLink" href='/forums'>Forums</a></li>
         <li><a class="navLink" href='/news'>News</a></li>
+        <% if (user == undefined) { %>
         <li><a class="navLink" href='/signup'>Sign Up</a></li>
         <li><a class="navLink" href='/login'>Log In</a></li>
+        <%  } else { %>
+        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>Profile</a></li>
         <li><a class="navLink" href='/logout'>Logout</a></li>
+        <%  } %>
 
       </ul>
     </header>
