@@ -9,28 +9,23 @@
   <title></title>
 </head>
 <body>
-  <nav class="black accent-4">
-    <li><a href='/'>Home</a></li>
-    <li><a href='/portfolio'>Portfolio</a></li>
-    <li><a href='/favorites'>Favorites</a></li>
-    <li><a href='/forums'>Forums</a></li>
-    <li><a href='/news'>News</a></li>
-    <% if (user.users == undefined) { %>
-    <li><a href='/signup'>Sign Up</a></li>
-    <li><a href='/login'>Log In</a></li>
+  <ul>
+    <li><a class="navLink" href='/'>Home</a></li>
+    <li><a class="navLink" href='/portfolio'>Portfolio</a></li>
+    <li><a class="navLink" href='/favorites'>Favorites</a></li>
+    <li><a class="navLink" href='/forums'>Forums</a></li>
+    <li><a class="navLink" href='/news'>News</a></li>
+    <% if (user == undefined) { %>
+    <li><a class="navLink" href='/signup'>Sign Up</a></li>
+    <li><a class="navLink" href='/login'>Log In</a></li>
     <%  } else { %>
-    <li><a href='/user/<%= user.users.id.toString() %>'>Profile</a></li>
-    <li><a href='/logout'>Logout</a></li>
+    <li><a class="navLink" href='/user/<%= req.toString() %>'>Profile</a></li>
+    <li><a class="navLink" href='/logout'>Logout</a></li>
     <%  } %>
-    <div class="nav-wrapper">
+    <li>User: <%= user %></li>
+    <li>Req: <%= req %></li>
+  </ul>
 
-      <ul class="right hide-on-med-and-down">
-        <li><a href='/'>Home</a></li>
-        <li><a href='/user/<%= id.toString() %>'>Profile</a></li>
-        <li><a href='/logout'>Logout</a></li>
-      </ul>
-    </div>
-  </nav>
   <div class="container">
     <div class="row">
 

@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 /*add you connection somewhere here*/
-mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost/Locals-dev');
+mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost/crypto-tracker4');
 
 /* adding model UserModel to index.js */
 module.exports.User = require('./User');
+module.exports.Coin = require('./Coin');

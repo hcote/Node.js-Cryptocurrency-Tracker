@@ -8,13 +8,15 @@ var express = require("express"),
   cookieParser = require("cookie-parser"),
   session = require("express-session"),
   passport = require("passport"),
-  LocalStrategy = require("passport-local").Strategy;
+  LocalStrategy = require("passport-local").Strategy,
+  axios = require('axios');
 
 
 
 // require Post model
 var db = require("./models"),
-  User = db.User;
+  User = db.User,
+  Coin = db.Coin;
 // configure bodyParser (for receiving form data)
 app.use(bodyParser.urlencoded({ extended: true, }));
 
@@ -42,53 +44,162 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-// HOMEPAGE ROUTE
-app.get("/", function (req, res) {
-      console.log(req.user);
-      User.find(function(err, users) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.render("index", {user: users});
-        }
-      })
+// HOMEPAGE ROUTE - is there a way to refactor routes requiring permission to be DRY
+// app.get("/", function (req, res) {
+//       var user = req.user
+//       if (req.user == undefined) {
+//         console.log(`Req.user = ${req.user}`);
+//         User.find(function(err, userFound) {
+//           if (err) {
+//             console.log(err);
+//           } else {
+//             console.log('getting this');
+//             axios.get('https://api.coinmarketcap.com/v1/ticker/')
+//               .then(function(res) {
+//                 Coin.remove({}, function(err, succ){
+//                   console.log(succ);
+//                 });
+//                   // console.log(`axios response: ${res.data[7].name}`);
+//                 for (i=0; i < res.data.length; i++) {
+//                   Coin.create({
+//                     username: [i],
+//                     symbol: res.data[i].symbol,
+//                     name: res.data[i].name,
+//                     price_usd: res.data[i].price_usd,
+//                     price_btc: res.data[i].price_btc,
+//                     qty: 1
+//                   })
+//                 }
+//               })
+//               .catch(function(err) {
+//                 console.log(err);
+//               })
+//         }
+//       })} else {
+//         var id = req.user._id
+//         console.log(`Req.user = ${req.user}`);
+//         User.find(function(err, userFound) {
+//           if (err) {
+//             console.log(err);
+//           } else {
+//             console.log('getting this');
+//             axios.get('https://api.coinmarketcap.com/v1/ticker/')
+//               .then(function(res) {
+//                   // console.log(`axios response: ${res.data[7].name}`);
+//                 for (i=0; i < res.data.length; i++) {
+//                   Coin.create({
+//                     symbol: res.data[i].symbol,
+//                     name: res.data[i].name,
+//                     price_usd: res.data[i].price_usd,
+//                     price_btc: res.data[i].price_btc,
+//                     qty: 1
+//                   })
+//                 }
+//               })
+//               .catch(function(err) {
+//                 console.log(err);
+//           })
+//         }
+//       })
+//   }});
 
-  });
+app.get('/', function(req, res) {
+    axios.get('https://api.coinmarketcap.com/v1/ticker/')
+         .then(function(response) {
+           console.log(`Response: ${response.status}`);
+           Coin.create(response.data, function(err, coinsCreated) {
+             if (err) {
+               console.log(err);
+             } else {
+                  console.log(`Coins: ${coinsCreated}`);
+             }
+           })
+           res.render('index')
+         })
+         .catch(function(err) {
+           console.log(err);
+           })
+})
+
+function handleCoins(json) {
+  Coin.create(json, function(err, coinsCreated) {
+    console.log(coinsCreated);
+  })
+}
 
 app.get("/portfolio", function (req, res) {
-  console.log(req.user);
-  User.find(function(err, users) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("portfolio", {user: users});
-    }
-  })
-  });
+        var user = req.user
+        if (req.user == undefined) {
+          console.log(`Req.user = ${req.user}`);
+          User.find(function(err, userFound) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("portfolio", {user: user, id: id});
+            }
+          })
+        } else {
+          var id = req.user._id
+          console.log(`Req.user = ${req.user}`);
+          User.find(function(err, userFound) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("portfolio", {user: user, id: id});
+            }
+          })
+        }
+    });
 
- app.get("/favorites", function (req, res) {
-   console.log(req.user);
-   User.find(function(err, users) {
-     if (err) {
-       console.log(err);
-     } else {
-       res.render("favorites", {user: users});
-     }
-   })
-  });
+    app.get("/favorites", function (req, res) {
+          var user = req.user
+          if (req.user == undefined) {
+            console.log(`Req.user = ${req.user}`);
+            User.find(function(err, userFound) {
+              if (err) {
+                console.log(err);
+              } else {
+                res.render("favorites", {user: user, id: id});
+              }
+            })
+          } else {
+            var id = req.user._id
+            console.log(`Req.user = ${req.user}`);
+            User.find(function(err, userFound) {
+              if (err) {
+                console.log(err);
+              } else {
+                res.render("favorites", {user: user, id: id});
+              }
+            })
+          }
+      });
 
- app.get("/forums", function (req, res) {
-   console.log(req.user);
-   User.find(function(err, users) {
-     if (err) {
-       console.log(err);
-     } else {
-       res.render("forums", {user: users});
-     }
-   })
-  });
+      app.get("/forums", function (req, res) {
+            var user = req.user
+            if (req.user == undefined) {
+              console.log(`Req.user = ${req.user}`);
+              User.find(function(err, userFound) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  res.render("forums", {user: user, id: id});
+                }
+              })
+            } else {
+              var id = req.user._id
+              console.log(`Req.user = ${req.user}`);
+              User.find(function(err, userFound) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  res.render("forums", {user: user, id: id});
+                }
+              })
+            }
+        });
 
- app.get("/news", function (req, res) {
+app.get("/news", function (req, res) {
    console.log(req.user);
    User.find(function(err, users) {
      if (err) {
@@ -135,7 +246,14 @@ app.get('/all', function(req, res) {
     if (err) {
       console.log("Error getting all Users: " +  err);
     } else {
-      res.json({users: allUsers})
+      Coin.find(function(err, allCoins) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.json({users: allUsers, coins: allCoins})
+        }
+      })
+
     }
   })
 })
@@ -164,6 +282,10 @@ app.post("/signup", function (req, res) {
   )
 });
 
+app.post('/all/coins', function(req, res) {
+
+})
+
 // CRUD Routes - all functional
 
 // SHOW (user profile) - working
@@ -179,6 +301,26 @@ app.get('/user/:id', function(req, res) {
       console.log(userId + " " + succ._id);
       res.render('profile', {user: succ, req: userId, id: Id})
     }})
+  })
+
+  // Coin show page
+  app.get('/:symbol', function(req, res) {
+    var coinId = req.params.symbol;
+    Coin.find({symbol: coinId}, function(err, succ) {
+      if (err) {
+        console.log(err);
+      } else {
+        User.find(function(err, users) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(succ);
+            res.render('coin_show', {coin: succ, user: users})
+          }
+        })
+
+      }
+    })
   })
 
 // UPDATE PAGE FOR USER PROFILE
@@ -226,7 +368,7 @@ app.delete('/user/:id', function(req, res) {
   console.log(req);
   User.findByIdAndRemove(req.params.id, function(err, deletedUser) {
     if (err) {
-      console.log("Error trying to delete post: " + err);
+      console.log("Error trying to delete profile: " + err);
     } else {
     console.log("User Deleted Sucessfully");
     res.redirect('/');
@@ -244,12 +386,13 @@ app.post("/login", passport.authenticate("local"), function (req, res) {
       res.redirect(`/user/${req.user._id}`);
     }
     else{
+      console.log(err);
       res.sendStatus(404);
     }
   })
 })
 
-// STILL NEED A LOGOUT BUTTON
+// Logout does not work yet
 app.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/");

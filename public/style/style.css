@@ -24,8 +24,7 @@ ul {
   display: none;
 }
 
-
-a {
+.navLink {
   list-style-type: none;
   text-decoration: none;
   color: #FFF;
@@ -33,8 +32,42 @@ a {
   box-shadow: 0 0 8px 2px #888;
 }
 
+.modal-button {
+  list-style-type: none;
+  text-decoration: none;
+  color: #FFF;
+}
 
-a:hover {
+.navLink:hover {
   background-color: #DA7B93;
   box-shadow: 0 0 8px 2px #DA7B93;
+  list-style-type: none;
+  text-decoration: none;
+  color: #FFF;
 }
+
+/* Table formatting */
+.table-row {
+   background-color: #ffffff;
+   box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
+ }
+
+ .table-head {
+    background-color: #F34;
+    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
+  }
+
+ table {
+   width: 90%;
+   margin: auto;
+ }
+
+ .tableHeader {
+   text-align: center;
+   padding: .3em .4em;
+ }
+
+ td {
+   text-align: center;
+   padding: .3em .4em;
+ }

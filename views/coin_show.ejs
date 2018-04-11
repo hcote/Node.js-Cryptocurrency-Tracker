@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/style/style.css">
     <!-- jQuery CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/scripts/app.js" charset="utf-8"></script>
+    <script src="/scripts/coin_show.js" charset="utf-8"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js" integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M" crossorigin="anonymous"></script>
@@ -24,13 +24,16 @@
         <li><a class="navLink" href='/favorites'>Favorites</a></li>
         <li><a class="navLink" href='/forums'>Forums</a></li>
         <li><a class="navLink" href='/news'>News</a></li>
+        <% if (user.users == undefined) { %>
         <li><a class="navLink" href='/signup'>Sign Up</a></li>
         <li><a class="navLink" href='/login'>Log In</a></li>
+        <%  } else { %>
+        <li><a class="navLink" href='/user/<%= user.users.id.toString() %>'>Profile</a></li>
         <li><a class="navLink" href='/logout'>Logout</a></li>
+        <%  } %>
 
       </ul>
     </header>
-    <input type="button" name="" value="Refresh Data" method="POST" action="/all/coins"></input>
     <table>
       <tbody class="tbl_header">
         <tr class="table_head">
@@ -41,8 +44,8 @@
            <th className="tableHeader">Price BTC</th>
            <th className="tableHeader">24h Volume</th>
            <th className="tableHeader">Market Cap</th>
-           <th className="tableHeader">Change 1 Day</th>
-           <th className="tableHeader">Change 7 Days</th>
+           <th className="tableHeader">% Change 1 Day</th>
+           <th className="tableHeader">% Change 7 Days</th>
            <th className="tableHeader">More</th>
         </tr>
       </tbody>
