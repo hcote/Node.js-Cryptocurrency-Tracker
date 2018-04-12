@@ -4,28 +4,26 @@
   <meta charset="UTF-8">
   <!-- set viewport to device width to make site responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="/styles/style.css">
+  <link rel="stylesheet" type="text/css" href="/style/style.css">
 
   <title></title>
 </head>
 <body>
-  <ul>
-    <li><a class="navLink" href='/'>Home</a></li>
-    <li><a class="navLink" href='/portfolio'>Portfolio</a></li>
-    <li><a class="navLink" href='/favorites'>Favorites</a></li>
-    <li><a class="navLink" href='/forums'>Forums</a></li>
-    <li><a class="navLink" href='/news'>News</a></li>
-    <% if (user == undefined) { %>
-    <li><a class="navLink" href='/signup'>Sign Up</a></li>
-    <li><a class="navLink" href='/login'>Log In</a></li>
-    <%  } else { %>
-    <li><a class="navLink" href='/user/<%= req.toString() %>'>Profile</a></li>
-    <li><a class="navLink" href='/logout'>Logout</a></li>
-    <%  } %>
-    <li>User: <%= user %></li>
-    <li>Req: <%= req %></li>
-  </ul>
+    <header class="App-header">
+      <div>
+        <h1 class="App-title">App Title Here</h1>
 
+      </div>
+      <ul>
+        <li><a class="navLink" href='/'>Home</a></li>
+        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>Portfolio</a></li>
+        <li><a class="navLink" href='/favorites'>Favorites</a></li>
+        <li><a class="navLink" href='/forums'>Forums</a></li>
+        <li><a class="navLink" href='/news'>News</a></li>
+        <li><a class="navLink" href='/signup'>Sign Up</a></li>
+        <li><a class="navLink" href='/login'>Log In</a></li>
+      </ul>
+    </header>
   <div class="container">
     <div class="row">
 

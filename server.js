@@ -45,59 +45,34 @@ passport.deserializeUser(User.deserializeUser());
 
 // CHECK
 app.get('/', function(req, res) {
-
-    axios.get('https://api.coinmarketcap.com/v1/ticker/')
-         .then(function(response) {
-           // console.log(`Response: ${response.status}`);
-           Coin.create(response.data, function(err, coinsCreated) {
+  axios.get('https://api.coinmarketcap.com/v1/ticker/')
+    .then(function(response) {
+       Coin.create(response.data, function(err, coinsCreated) {
+          if (err) {
+           console.log(err);
+         } else {
+           Coin.find(function(err, allCoins) {
              if (err) {
                console.log(err);
              } else {
-               Coin.find(function(err, allCoins) {
-                 if (err) {
-                   console.log(err);
-                 } else {
-                     res.render('index', {user: req.user, coins: allCoins})
-                 }
-
-             })
+                 res.render('index', {user: req.user, coins: allCoins})
              }
            })
-         })
-         .catch(function(err) {
-           console.log(err);
-        })
-
-
-      })
+         }
+       })
+     })
+     .catch(function(err) {
+       console.log(err);
+    })
+   })
 
 
 
 app.get("/favorites", function (req, res) {
-          var user = req.user
-          if (req.user == undefined) {
-            console.log(`Req.user = ${req.user}`);
-            User.find(function(err, userFound) {
-              if (err) {
-                console.log(err);
-              } else {
-                res.render("favorites", {user: user, id: id});
-              }
-            })
-          } else {
-            var id = req.user._id
-            console.log(`Req.user = ${req.user}`);
-            User.find(function(err, userFound) {
-              if (err) {
-                console.log(err);
-              } else {
-                res.render("favorites", {user: user, id: id});
-              }
-            })
-          }
+
       });
 
-      app.get("/forums", function (req, res) {
+app.get("/forums", function (req, res) {
             var user = req.user
             if (req.user == undefined) {
               console.log(`Req.user = ${req.user}`);
@@ -162,22 +137,10 @@ app.get('/all', function(req, res) {
 // CHECK
 app.post("/signup", function (req, res) {
   console.log(req.body);
-  User.register(new User({ username: req.body.username,
-                           password: req.body.password,
-                           name: req.body.name,
-                           isLocal: req.body.isLocal,
-                           age: req.body.age,
-                           city: req.body.city,
-                           bio: req.body.bio}), req.body.password,
+  User.register(new User({ username: req.body.username}), req.body.password,
       function () {
         passport.authenticate("local")(req, res, function() {
-          // If a traveler signs up, redirect to the feed
-          if (req.body.isLocal === 'Traveler') {
-          res.redirect('/feed');
-        } else {
-          // If a local signs up, redirect to their profile
           res.redirect(`/user/${req.user._id}`);
-        }
       })
     }
   )
@@ -331,9 +294,9 @@ app.delete('/user/:id', function(req, res) {
   })
 })
 
-// LOGIN login
+// Login
 app.post("/login", passport.authenticate("local"), function (req, res) {
-  User.findOne({username: req.body.username}, function(err, succ){
+  User.findOne({email: req.body.email}, function(err, succ){
     console.log("Error is: " + err);
     console.log("Success is: " + succ);
     if(req.body.password === succ.password) {

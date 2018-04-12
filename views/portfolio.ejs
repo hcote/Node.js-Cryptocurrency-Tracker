@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" href="/style/style.css">
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   </head>
   <body>
     <header class="App-header">
@@ -56,8 +56,58 @@
             <td> <%= coinIds[i].qty * coinIds[i].price_usd  %> </td>
           </tr>
           <%    } %>
-    <% } else { %>
+        </tbody>
+      </table>
+      <div id="chart_div" style="width: 900px; height: 500px;"></div>
+      <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+      <% } else { %>
       <p>You must sign in to access this feature</p>
       <% } %>
+      <script type="text/javascript">
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Total Value', 'Percent of Value'],
+      ['NEO',     11],
+      ['Monero',      2],
+      ['Bitcoin',  2],
+      ['0x', 2],
+      ['Ethereum',    7]
+    ]);
+
+    var options = {
+      title: 'Portfolio Breakdown',
+      is3D: true,
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    chart.draw(data, options);
+  }
+</script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Month', 'Value'],
+      ['Nov',  1000],
+      ['Dec',  1170],
+      ['Jan',  660],
+      ['Feb',  1030],
+      ['March', 1000]
+    ]);
+
+    var options = {
+      title: 'Portfolio Performance',
+      hAxis: {title: 'Month',  titleTextStyle: {color: '#333'}},
+      vAxis: {minValue: 0}
+    };
+
+    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }
+</script>
   </body>
 </html>
