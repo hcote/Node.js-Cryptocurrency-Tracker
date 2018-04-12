@@ -79,26 +79,15 @@ app.get("/portfolio/:id", function (req, res) {
     if (err) {
       console.log(err);
     } else {
-      User.find({})
+      User.findOne({ _id: userId})
       .populate('User.portfolio')
       .exec(function(err, port) {
-          res.render("portfolio", {user: succ, portfolio: port});
+        console.log(`port: ${port.portfolio}`);
+          res.render('portfolio', {user: succ, coinIds: port.portfolio});
       })
     }
   })
 });
-
-// Portfolio if not signed in
-// app.get("/portfolio/", function (req, res) {
-//   var userId = req.user
-//   User.findById(userId, function(err, succ) {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       res.render("portfolio", {user: succ});
-//     }
-//   })
-// });
 
 app.get("/favorites", function (req, res) {
           var user = req.user

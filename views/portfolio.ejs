@@ -26,7 +26,9 @@
         <%  } %>      </ul>
     </header>
     <% if (user) { %>
-      <p>You are authorized to ake a portfolio</p>
+      <% for (i = 0; i < coinIds.length; i++) { %>
+        <p><%= coinIds[i] %></p>
+  <%    } %>
       <p>Loop through the localhost/all users coins and display the table exactly as it is on the home page</p>
     <% } else { %>
       <p>You must sign in to access this feature</p>
