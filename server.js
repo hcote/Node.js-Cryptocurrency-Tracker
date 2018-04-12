@@ -45,22 +45,32 @@ passport.deserializeUser(User.deserializeUser());
 
 // CHECK
 app.get('/', function(req, res) {
-    // axios.get('https://api.coinmarketcap.com/v1/ticker/')
-    //      .then(function(response) {
-    //        console.log(`Response: ${response.status}`);
-    //        Coin.create(response.data, function(err, coinsCreated) {
-    //          if (err) {
-    //            console.log(err);
-    //          } else {
-    //               console.log(`Coins: ${coinsCreated}`);
-    //          }
-    //        })
-    //      })
-    //      .catch(function(err) {
-    //        console.log(err);
-    //     })
-    console.log(req.user);
-        res.render('index', {user: req.user})
+    Coin.remove({}, function(err, succ){
+    console.log(succ);
+  });
+    axios.get('https://api.coinmarketcap.com/v1/ticker/')
+         .then(function(response) {
+           // console.log(`Response: ${response.status}`);
+           Coin.create(response.data, function(err, coinsCreated) {
+             if (err) {
+               console.log(err);
+             } else {
+                  // console.log(`Coins: ${coinsCreated}`);
+             }
+           })
+         })
+         .catch(function(err) {
+           console.log(err);
+        })
+          console.log(req.user);
+          Coin.find(function(err, allCoins) {
+            if (err) {
+              console.log(err);
+            } else {
+                res.render('index', {user: req.user, coins: allCoins})
+            }
+
+        })
       })
 
 // CHECK
@@ -70,7 +80,11 @@ app.get("/portfolio/:id", function (req, res) {
     if (err) {
       console.log(err);
     } else {
-      res.render("portfolio", {user: succ});
+      User.find({})
+      .populate('User.portfolio')
+      .exec(function(err, port) {
+          res.render("portfolio", {user: succ, portfolio: port});
+      })
     }
   })
 });
@@ -249,6 +263,38 @@ app.get('/user/:id/update', function(req, res) {
     } else {
       res.render('update_profile', {user: succ, req: userId, id: Id})
     }})
+})
+
+app.post('/addCoin', function(req, res) {
+  var userId = req.user._id
+  User.findById(userId, function(err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
+        console.log(`foundCoin: ${foundCoin}`);
+        console.log(`foundCoin: ${foundCoin.symbol}`);
+        console.log(`req.body.symbol: ${req.body.symbol}`);
+        var newCoin = new Coin ({
+          symbol: foundCoin.symbol,
+          name: foundCoin.name,
+          price_usd: foundCoin.price_usd,
+          price_btc: foundCoin.price_btc,
+          qty: req.body.qty
+        })
+        console.log(`newCoin: ${newCoin}`);
+        newCoin.save(function(err, saved) {
+          if (err) {
+            (`Error saving: ${err}`)
+          } else {
+            console.log(`foundUser: ${foundUser}`);
+            foundUser.portfolio.push(newCoin._id);
+            res.redirect('/')
+          }
+        })
+      })
+    }
+  })
 })
 
 // SAVE UPDATES FOR USER PROFILE

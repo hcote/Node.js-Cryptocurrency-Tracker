@@ -5,8 +5,12 @@ var mongoose = require("mongoose"),
 var CoinSchema = new Schema({
   symbol: String,
   name: String,
-  price_usd: Number,
-  price_btc: Number,
+  rank: String,
+  price_usd: String,
+  price_btc: String,
+  market_cap_usd: String,
+  percent_change_7d: String,
+  percent_change_24h: String,
   qty: Number
 });
 
