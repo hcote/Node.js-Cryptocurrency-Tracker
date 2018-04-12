@@ -272,14 +272,14 @@ app.post('/addCoin', function(req, res) {
       console.log(err);
     } else {
       Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
-        console.log(`foundCoin: ${foundCoin}`);
-        console.log(`foundCoin: ${foundCoin.symbol}`);
+        // console.log(`foundCoin: ${foundCoin}`);
+        console.log(`foundCoin: ${foundCoin[0].name}` );
         console.log(`req.body.symbol: ${req.body.symbol}`);
         var newCoin = new Coin ({
-          symbol: foundCoin.symbol,
-          name: foundCoin.name,
-          price_usd: foundCoin.price_usd,
-          price_btc: foundCoin.price_btc,
+          symbol: foundCoin[0].symbol,
+          name: foundCoin[0].name,
+          price_usd: foundCoin[0].price_usd,
+          price_btc: foundCoin[0].price_btc,
           qty: req.body.qty
         })
         console.log(`newCoin: ${newCoin}`);
