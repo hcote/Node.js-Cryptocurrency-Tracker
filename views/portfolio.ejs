@@ -26,10 +26,36 @@
         <%  } %>      </ul>
     </header>
     <% if (user) { %>
-      <% for (i = 0; i < coinIds.length; i++) { %>
-        <p><%= coinIds[i] %></p>
-  <%    } %>
-      <p>Loop through the localhost/all users coins and display the table exactly as it is on the home page</p>
+        <table>
+          <tbody class="tbl_header">
+            <tr class="table_head">
+               <th className="tableHeader">Rank</th>
+               <th className="tableHeader">Name</th>
+               <th className="tableHeader">Symbol</th>
+               <th className="tableHeader">Price $</th>
+               <th className="tableHeader">Price BTC</th>
+               <th className="tableHeader">24h Volume</th>
+               <th className="tableHeader">Market Cap</th>
+               <th className="tableHeader">Change 1 Day</th>
+               <th className="tableHeader">Change 7 Days</th>
+               <th className="tableHeader">Quantity</th>
+               <th className="tableHeader">Value</th>
+            </tr>
+            <% for (i = 0; i < coinIds.length; i++) { %>
+            <tr>
+            <td><%= coinIds[i].rank %> </td>
+            <td><%= coinIds[i].name %> </td>
+            <td><%= coinIds[i].symbol %> </td>
+            <td><%= coinIds[i].price_usd %> </td>
+            <td><%= coinIds[i].price_btc %> </td>
+            <td>Volume</td>
+            <td><%= coinIds[i].market_cap_usd %> </td>
+            <td><%= coinIds[i].percent_change_24h %> </td>
+            <td><%= coinIds[i].percent_change_7d %> </td>
+            <td><%= coinIds[i].qty %></td>
+            <td> <%= coinIds[i].qty * coinIds[i].price_usd  %> </td>
+          </tr>
+          <%    } %>
     <% } else { %>
       <p>You must sign in to access this feature</p>
       <% } %>

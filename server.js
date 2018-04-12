@@ -282,7 +282,7 @@ app.get("/portfolio/:id", function (req, res) {
       console.log(err);
     } else {
       User.find()
-      .populate('portfolio', 'name')
+      .populate('portfolio', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
       .exec(function(err, returnedPort) {
         console.log(`.exec fn returned: ${returnedPort}`);
           res.render('portfolio', {user: user, coinIds: returnedPort[0].portfolio});
