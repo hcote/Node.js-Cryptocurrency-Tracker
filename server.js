@@ -45,8 +45,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // CHECK
 app.get('/', function(req, res) {
-    Coin.remove({}, function(err, succ){
-  });
+
     axios.get('https://api.coinmarketcap.com/v1/ticker/')
          .then(function(response) {
            // console.log(`Response: ${response.status}`);
@@ -72,22 +71,7 @@ app.get('/', function(req, res) {
 
       })
 
-// CHECK
-app.get("/portfolio/:id", function (req, res) {
-  var userId = req.params.id;
-  User.findById(userId, function(err, succ) {
-    if (err) {
-      console.log(err);
-    } else {
-      User.findOne({ _id: userId})
-      .populate('User.portfolio')
-      .exec(function(err, port) {
-        console.log(`port: ${port.portfolio}`);
-          res.render('portfolio', {user: succ, coinIds: port.portfolio});
-      })
-    }
-  })
-});
+
 
 app.get("/favorites", function (req, res) {
           var user = req.user
@@ -277,10 +261,10 @@ app.post('/addCoin', function(req, res) {
           if (err) {
             (`Error saving: ${err}`)
           } else {
-            console.log(`newCoin: ${newCoin}`);
-            foundUser.portfolio.push(`${newCoin._id}`);
-            console.log(`foundUser: ${foundUser}`);
-            foundUser.save();
+            console.log(`newCoin saved: ${newCoin}`);
+            foundUser.portfolio.push(newCoin._id);
+            console.log(`foundUser portfolio: ${foundUser.portfolio}`);
+            foundUser.save()
             res.redirect('/')
           }
         })
@@ -288,6 +272,24 @@ app.post('/addCoin', function(req, res) {
     }
   })
 })
+
+// CHECK
+app.get("/portfolio/:id", function (req, res) {
+  var userId = req.params.id;
+  console.log(userId);
+  User.findById(userId, function(err, user) {
+    if (err) {
+      console.log(err);
+    } else {
+      User.find()
+      .populate('portfolio', 'name')
+      .exec(function(err, returnedPort) {
+        console.log(`.exec fn returned: ${returnedPort}`);
+          res.render('portfolio', {user: user, coinIds: returnedPort[0].portfolio});
+      })
+    }
+  })
+});
 
 // SAVE UPDATES FOR USER PROFILE
 app.put('/user/:id', function(req, res) {
