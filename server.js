@@ -46,7 +46,6 @@ passport.deserializeUser(User.deserializeUser());
 // CHECK
 app.get('/', function(req, res) {
     Coin.remove({}, function(err, succ){
-    console.log(succ);
   });
     axios.get('https://api.coinmarketcap.com/v1/ticker/')
          .then(function(response) {
@@ -55,22 +54,22 @@ app.get('/', function(req, res) {
              if (err) {
                console.log(err);
              } else {
-                  // console.log(`Coins: ${coinsCreated}`);
+               Coin.find(function(err, allCoins) {
+                 if (err) {
+                   console.log(err);
+                 } else {
+                     res.render('index', {user: req.user, coins: allCoins})
+                 }
+
+             })
              }
            })
          })
          .catch(function(err) {
            console.log(err);
         })
-          console.log(req.user);
-          Coin.find(function(err, allCoins) {
-            if (err) {
-              console.log(err);
-            } else {
-                res.render('index', {user: req.user, coins: allCoins})
-            }
 
-        })
+
       })
 
 // CHECK
@@ -183,7 +182,6 @@ app.get('/all', function(req, res) {
           res.json({users: allUsers, coins: allCoins})
         }
       })
-
     }
   })
 })
@@ -276,19 +274,24 @@ app.post('/addCoin', function(req, res) {
         console.log(`foundCoin: ${foundCoin[0].name}` );
         console.log(`req.body.symbol: ${req.body.symbol}`);
         var newCoin = new Coin ({
+          rank: foundCoin[0].rank,
+          market_cap_usd: foundCoin[0].market_cap_usd,
+          percent_change_7d: foundCoin[0].percent_change_7d,
+          percent_change_24h: foundCoin[0].percent_change_24h,
           symbol: foundCoin[0].symbol,
           name: foundCoin[0].name,
           price_usd: foundCoin[0].price_usd,
           price_btc: foundCoin[0].price_btc,
           qty: req.body.qty
         })
-        console.log(`newCoin: ${newCoin}`);
         newCoin.save(function(err, saved) {
           if (err) {
             (`Error saving: ${err}`)
           } else {
+            console.log(`newCoin: ${newCoin}`);
+            foundUser.portfolio.push(`${newCoin._id}`);
             console.log(`foundUser: ${foundUser}`);
-            foundUser.portfolio.push(newCoin._id);
+            foundUser.save();
             res.redirect('/')
           }
         })
@@ -339,7 +342,6 @@ app.delete('/user/:id', function(req, res) {
 
 // LOGIN login
 app.post("/login", passport.authenticate("local"), function (req, res) {
-  console.log(req);
   User.findOne({username: req.body.username}, function(err, succ){
     console.log("Error is: " + err);
     console.log("Success is: " + succ);
