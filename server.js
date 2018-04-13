@@ -132,7 +132,7 @@ app.get("/login", function (req, res) {
   res.render("login");
 });
 
-// CHECK
+// View all data in db
 app.get('/all', function(req, res) {
   User.find(function(err, allUsers) {
     if (err) {
@@ -149,7 +149,7 @@ app.get('/all', function(req, res) {
   })
 })
 
-// CHECK
+// Register new user and redirect to profile
 app.post("/signup", function (req, res) {
   console.log(req.body);
   User.register(new User({ username: req.body.username}), req.body.password,
