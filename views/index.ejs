@@ -16,7 +16,7 @@
     <header class="App-header">
 
       <div>
-        <h1 class="App-title">App Title Here</h1>
+        <h1 class="App-title">BitCheck</h1>
       </div>
       <ul>
         <li><a class="navLink" href='/'>Home</a></li>
@@ -63,10 +63,10 @@
           <td><%= coin.symbol %> </td>
           <td><%= coin.price_usd %> </td>
           <td><%= coin.price_btc %> </td>
-          <td>Volume</td>
+          <td></td>
           <td><%= coin.market_cap_usd %> </td>
-          <td><%= coin.percent_change_24h %> </td>
-          <td><%= coin.percent_change_7d %> </td>
+          <td><%= coin.percent_change_24h %>%</td>
+          <td><%= coin.percent_change_7d %>%</td>
           <td>
             <form method='POST' action='/addCoin'>
                 <input type='submit' class='btn' value='Add To Portfolio'></input>

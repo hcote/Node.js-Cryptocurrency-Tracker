@@ -2,77 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- set viewport to device width to make site responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- materialize css -->
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-  <!-- custom styles -->
-  <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
 
-  <link rel="stylesheet" type="text/css" href="/styles/style.css">
-  <!-- jquery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-  <!-- materialize js -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-   <!-- app.js -->
    <script type="text/javascript" src='/scripts/app.js'></script>
+   <link rel="stylesheet" href="/style/style.css">
 
-  <title>Locals</title>
+  <title>Edit Profile</title>
 </head>
 <body>
-  <nav class="black accent-4">
-    <div class="nav-wrapper">
-      <a href="#" data-activities="mobile-demo" class="button-collapse"><i class="materiale-icons">Menu</i></a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href='/'>Home</a></li>
-        <li><a href='/portfolio'>Portfolio</a></li>
-        <li><a href='/favorites'>Favorites</a></li>
-        <li><a href='/forums'>Forums</a></li>
-        <li><a href='/news'>News</a></li>
-        <% if (user.users == undefined) { %>
-        <li><a href='/signup'>Sign Up</a></li>
-        <li><a href='/login'>Log In</a></li>
-        <%  } else { %>
-        <li><a href='/user/<%= user.users.id.toString() %>'>Profile</a></li>
-        <li><a href='/logout'>Logout</a></li>
-        <%  } %>
-      </ul>
+  <header class="App-header">
+    <div>
+      <h1 class="App-title">BitCheck</h1>
     </div>
-  </nav>
-  <div class="container">
-    <div class="row">
-      <div class="col s10 offset-s1">
+    <ul>
+      <li><a class="navLink" href='/'>Home</a></li>
+      <li><a class="navLink" href='/portfolio'>Portfolio</a></li>
+      <li><a class="navLink" href='/favorites'>Favorites</a></li>
+      <li><a class="navLink" href='/forums'>Forums</a></li>
+      <li><a class="navLink" href='/news'>News</a></li>
+      <% if (user.users == undefined) { %>
+      <li><a class="navLink" href='/signup'>Sign Up</a></li>
+      <li><a class="navLink" href='/login'>Log In</a></li>
+      <%  } else { %>
+      <li><a class="navLink" href='/user/<%= user.users.id.toString() %>'>Profile</a></li>
+      <li><a class="navLink" href='/logout'>Logout</a></li>
+      <%  } %>      </ul>
+  </header>
+
         <h2>Update your Profile</h2>
         <br>
         <form action="/user/<%= user._id %>?_method=PUT" method="POST">
           <div class="col s12">
-            <input type="text" name="name" value="<%= user.name %>" placeholder="Name">
-          </div>
-          <div class="col s12">
             <input type="email" name="username" value="<%= user.username %>">
           </div>
-          <div class="col s12">
-            <select class="form-control" name="isLocal">
-              <option value="Traveler">Traveler</option>
-              <option value="Local">Local</option>
-            </select>
-          </div>
-          <div class="col s12">
-            <input type="number" name="age" placeholder="Age" value="<%= user.age %>">
-          </div>
-          <div class="col s12">
-            <input type="text" name="city" placeholder="City" value="<%= user.city %>">
-          </div>
-          <div class="col s12">
-            <input type="text" name="bio" placeholder="Bio" value="<%= user.bio %>">
-          </div>
-          <div class="center-align">
-            <input type="submit" class="waves-effect waves-light btn" value="Update">
+
+          <div>
+            <input type="submit"value="Update">
           </div>
           <br>
         </form>
-      </div>
-    </div>
-  </div>
+
 </body>
 </html>

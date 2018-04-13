@@ -10,7 +10,7 @@
 
 
       <div>
-        <h1 class="App-title">App Title Here</h1>
+        <h1 class="App-title">BitCheck</h1>
 
       </div>
 
@@ -29,23 +29,17 @@
 
     </header>
 
-    <div class="container center-align">
-  <div class="row">
-      <h2>Sign Up</h2>
 
-      <form method="POST" action="/signup">
-        <div class="col s10 offset-s1">
-          <input type="email" name="username" class="validate invalid" placeholder="Email">
-        </div>
-        <div class="col s10 offset-s1">
+  <div class="center-align">
+      <h2 class="h2">Sign Up</h2>
+      <br>
+      <form method="POST" action="/signup" class="form">
+          <input type="email" name="username" class="validate invalid" placeholder="Email" autofocus>
           <input type="password" name="password" class="validate" placeholder="Password">
-        </div>
-        <div class="center-align">
           <input type="submit" class="waves-effect waves-light btn" value="Sign Up">
-        </div>
         <br>
       </form>
   </div>
-</div>
+
   </body>
 </html>

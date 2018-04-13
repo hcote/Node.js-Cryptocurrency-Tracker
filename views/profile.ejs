@@ -11,7 +11,7 @@
 <body>
     <header class="App-header">
       <div>
-        <h1 class="App-title">App Title Here</h1>
+        <h1 class="App-title">BitCheck</h1>
 
       </div>
       <ul>
@@ -20,43 +20,23 @@
         <li><a class="navLink" href='/favorites'>Favorites</a></li>
         <li><a class="navLink" href='/forums'>Forums</a></li>
         <li><a class="navLink" href='/news'>News</a></li>
-        <li><a class="navLink" href='/signup'>Sign Up</a></li>
-        <li><a class="navLink" href='/login'>Log In</a></li>
       </ul>
     </header>
-  <div class="container">
-    <div class="row">
 
-      <div class="col s10 offset-s1">
-          <img src="/images/blank.jpg" alt="Profile Picture" class="prof">
-          <div class="form-group">
-                Name: <span class="userInfo"><%= user.name %></span>
-          </div>
-          <div class="form-group">
-                Email: <span class="userInfo"><%= user.username %></span>
-          </div>
-
-
-        <div class="flexbox">
-          <form action="/user/<%= user._id %>/update" method="GET">
-            <div class="center-align">
-              <input type="submit" class="waves-effect waves-light btn padding" value="Edit">
-            </div>
-          </form>
-          <form action="/user/<%= user._id %>?_method=DELETE" method="POST">
-            <div class="center-align">
-              <input type="submit" class="waves-effect waves-light btn padding" value="Delete Profile">
-            </div>
+      <div class="center-align">
+        <br>
+          <div class="form">Email: <%= user.username %></div>
+          <br>
+          <div class="flexbox">
+            <form action="/user/<%= user._id %>/update" method="GET">
+              <input type="submit" value="Edit">
             </form>
-            <div class="center-align">
-              <a href='/feed' class="waves-effect waves-light btn">Back</a>
-            </div>
-            </div>
+            <form action="/user/<%= user._id %>?_method=DELETE" method="POST">
+              <input type="submit" value="Delete Profile">
+            </form>
+          </div>
             <br>
-
-      </div>
-    </div>
-  </div>
+       </div>
 
 
 

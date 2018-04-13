@@ -115,7 +115,8 @@ ul {
     }
 
   .bigger_div {
-    max-width: 80%;
+    width: 80%;
+    max-width: 800px;
     margin: auto;
   }
 
@@ -140,4 +141,26 @@ ul {
   .news_anchor_tags {
     text-decoration: none;
     color: #000;
+  }
+
+  .center-align {
+    width: 600px;
+    margin: auto;
+    box-shadow: 0 0 8px 2px #d3d3d3;
+    padding-bottom: 2em;
+    padding-top: 1em;
+  }
+
+  .h2 {
+    text-align: center;
+  }
+
+  .form {
+    text-align: center;
+  }
+
+  .flexbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
