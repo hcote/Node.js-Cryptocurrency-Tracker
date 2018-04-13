@@ -66,11 +66,43 @@ app.get('/', function(req, res) {
     })
    })
 
+// Create favorites
+app.post('/addToFavorites', function(req, res) {
+ var userId = req.user._id
+  User.findById(userId, function(err, foundUser) {
+   if (err) {
+     console.log(`Err: ${err}`);
+   } else {
+     console.log(`Found User: ${foundUser}`);
+     Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
+          if (err) {
+            console.log(`Error finding coin: ${err}`);
+          } else {
+           foundUser.favorites.push(foundCoin[0]._id);
+           foundUser.save()
+           res.redirect('/')
+         }
+       })
+      }
+    })
+  })
 
-
-app.get("/favorites", function (req, res) {
-
-      });
+  app.get("/favorites/:id", function (req, res) {
+    var userId = req.params.id;
+    console.log(userId);
+    User.findById(userId, function(err, user) {
+      if (err) {
+        console.log(err);
+      } else {
+        User.find()
+        .populate('favorites', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
+        .exec(function(err, returnedFavs) {
+          console.log(`.exec fn returned: ${returnedFavs}`);
+            res.render('favorites', {user: user, coinIds: returnedFavs[0].favorites});
+        })
+      }
+    })
+  });
 
 app.get("/forums", function (req, res) {
             var user = req.user
@@ -146,11 +178,6 @@ app.post("/signup", function (req, res) {
   )
 });
 
-app.post('/all/coins', function(req, res) {
-
-})
-
-// CRUD Routes - all functional
 
 // SHOW (user profile) - working
 app.get('/user/:id', function(req, res) {

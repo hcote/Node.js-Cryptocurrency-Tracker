@@ -7,25 +7,23 @@
     <!-- jQuery CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/scripts/app.js" charset="utf-8"></script>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js" integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M" crossorigin="anonymous"></script>
   </head>
 
   <body>
     <header class="App-header">
 
       <div>
-        <h1 class="App-title">BitCheck</h1>
+        <h1 class="">BitCheck</h1>
       </div>
       <ul>
         <li><a class="navLink" href='/'>Home</a></li>
         <% if (user == undefined) { %>
         <li><a class="navLink" href='/portfolio/>'>Portfolio</a></li>
+        <li><a class="navLink" href='/favorites/>'>Favorites</a></li>
         <%  } else { %>
         <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>Portfolio</a></li>
+        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>Favorites</a></li>
         <%  } %>
-        <li><a class="navLink" href='/favorites'>Favorites</a></li>
         <li><a class="navLink" href='/forums'>Forums</a></li>
         <li><a class="navLink" href='/news'>News</a></li>
         <% if (user == undefined) { %>
@@ -39,9 +37,6 @@
       </ul>
     </header>
 
-
-
-    <input type="button" name="" value="Refresh Data" method="POST" action="/all/coins"></input>
     <table>
       <tbody class="tbl_header">
         <tr class="table_head">
@@ -52,12 +47,13 @@
            <th className="tableHeader">Price BTC</th>
            <th className="tableHeader">24h Volume</th>
            <th className="tableHeader">Market Cap</th>
-           <th className="tableHeader">Change 1 Day</th>
-           <th className="tableHeader">Change 7 Days</th>
-           <th className="tableHeader">More</th>
+           <th className="tableHeader">% Change 1d</th>
+           <th className="tableHeader">% Change 7d</th>
+           <th className="tableHeader">Portfolio</th>
+           <th className="tableHeader">Favorites</th>
         </tr>
-        <tr>
         <% for (let coin of coins) { %>
+        <tr class="table-row">
           <td><%= coin.rank %> </td>
           <td><%= coin.name %> </td>
           <td><%= coin.symbol %> </td>
@@ -69,18 +65,16 @@
           <td><%= coin.percent_change_7d %>%</td>
           <td>
             <form method='POST' action='/addCoin'>
-                <input type='submit' class='btn' value='Add To Portfolio'></input>
-                <input type='text' name='qty'></input>
-                <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
+              <input type='text' name='qty'></input>
+              <input type='submit' class='btn' value='Add'></input>
+              <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
             </form>
-
-                                  <!-- <button class="trigger">Click here to trigger the modal!</button> -->
-                                  <!-- <div class="modal">
-                                      <div class="modal-content">
-                                          <span class="close-button">&times;</span>
-                                          <h1>Hello, I am a modal!</h1>
-                                      </div>
-                                  </div> -->
+         </td>
+         <td>
+         <form method='POST' action='/addToFavorites'>
+           <input type='submit' class='btn' value='Add'></input>
+           <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
+         </form>
          </td>
       </tr>
 <%  } %>

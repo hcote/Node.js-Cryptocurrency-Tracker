@@ -52,9 +52,13 @@ ul {
    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
  }
 
- .table-head {
-    background-color: #F34;
-    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
+ .table_head {
+    background-color: #376E6F;
+    box-shadow: 0px 0px 9px 0px #000;
+    color: #FFF;
+    text-align: center;
+    font-weight: 200;
+    border: #376E6F
   }
 
  table {
@@ -62,14 +66,15 @@ ul {
    margin: auto;
  }
 
- .tableHeader {
+ th {
    text-align: center;
-   padding: .3em .4em;
+   padding: .6em;
+   font-weight: 200
  }
 
  td {
    text-align: center;
-   padding: .3em .4em;
+   padding: .6em 1em;
  }
 
  /* Modal CSS */
@@ -163,4 +168,10 @@ ul {
     display: flex;
     flex-direction: row;
     justify-content: center;
+  }
+
+  .article_footer {
+    color: gray;
+    font-size: .5em;
+    text-align: left;
   }

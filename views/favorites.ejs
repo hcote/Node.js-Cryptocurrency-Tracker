@@ -26,8 +26,36 @@
         <%  } %>      </ul>
     </header>
     <% if (user) { %>
-      <p>You are authorized to make favorites</p>
-    <% } else { %>
+        <table>
+          <tbody class="tbl_header">
+            <tr class="table_head">
+               <th className="tableHeader">Rank</th>
+               <th className="tableHeader">Name</th>
+               <th className="tableHeader">Symbol</th>
+               <th className="tableHeader">Price $</th>
+               <th className="tableHeader">Price BTC</th>
+               <th className="tableHeader">24h Volume</th>
+               <th className="tableHeader">Market Cap</th>
+               <th className="tableHeader">Change 1 Day</th>
+               <th className="tableHeader">Change 7 Days</th>
+            </tr>
+            <% for (i = 0; i < coinIds.length; i++) { %>
+            <tr>
+            <td><%= coinIds[i].rank %> </td>
+            <td><%= coinIds[i].name %> </td>
+            <td><%= coinIds[i].symbol %> </td>
+            <td><%= coinIds[i].price_usd %> </td>
+            <td><%= coinIds[i].price_btc %> </td>
+            <td>Volume</td>
+            <td><%= coinIds[i].market_cap_usd %> </td>
+            <td><%= coinIds[i].percent_change_24h %>%</td>
+            <td><%= coinIds[i].percent_change_7d %>%</td>
+          </tr>
+          <%    } %>
+        </tbody>
+      </table>
+      <input type="button" name="" value="View Graph" class="table_row">
+      <% } else { %>
       <p>You must sign in to access this feature</p>
       <% } %>
   </body></html>

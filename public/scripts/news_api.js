@@ -19,6 +19,7 @@ $.ajax({
        <img src="${data.urlToImage}" alt="Image for ${data.title}" class="news_image">
        <h1 class="newsHeadline">${data.title}</h1>
        <p>${data.description}</p>
+       <p class="article_footer">${data.publishedAt}</p>
        </a>
        <hr />
        `)
