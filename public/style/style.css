@@ -114,4 +114,30 @@ ul {
         transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
     }
 
-  
+  .bigger_div {
+    max-width: 80%;
+    margin: auto;
+  }
+
+  .big_div {
+    max-width: 80%;
+    margin: auto;
+
+  }
+
+  .news_image {
+    float: right;
+    width: 120px;
+  }
+
+  .news_anchor_tags {
+    font-size: 1em;
+    text-decoration: none;
+    box-shadow: 0 0 8px 2px #000;
+    clear: both;
+  }
+
+  .news_anchor_tags {
+    text-decoration: none;
+    color: #000;
+  }
