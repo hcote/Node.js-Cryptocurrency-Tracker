@@ -66,7 +66,7 @@ app.get('/', function(req, res) {
     })
    })
 
-// Create favorites
+// Add favorites
 app.post('/addToFavorites', function(req, res) {
  var userId = req.user._id
   User.findById(userId, function(err, foundUser) {
@@ -85,49 +85,32 @@ app.post('/addToFavorites', function(req, res) {
        })
       }
     })
-  })
-
-  app.get("/favorites/:id", function (req, res) {
-    var userId = req.params.id;
-    console.log(userId);
-    User.findById(userId, function(err, user) {
-      if (err) {
-        console.log(err);
-      } else {
-        User.find()
-        .populate('favorites', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
-        .exec(function(err, returnedFavs) {
-          console.log(`.exec fn returned: ${returnedFavs}`);
-            res.render('favorites', {user: user, coinIds: returnedFavs[0].favorites});
-        })
-      }
-    })
   });
 
-app.get("/forums", function (req, res) {
-            var user = req.user
-            if (req.user == undefined) {
-              console.log(`Req.user = ${req.user}`);
-              User.find(function(err, userFound) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  res.render("forums", {user: user, id: id});
-                }
-              })
-            } else {
-              var id = req.user._id
-              console.log(`Req.user = ${req.user}`);
-              User.find(function(err, userFound) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  res.render("forums", {user: user, id: id});
-                }
-              })
-            }
-        });
+// Get favorites tab
+app.get("/favorites/:id", function (req, res) {
+  var userId = req.params.id;
+  console.log(userId);
+  User.findById(userId, function(err, user) {
+    if (err) {
+      console.log(err);
+    } else {
+      User.find()
+      .populate('favorites', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
+      .exec(function(err, returnedFavs) {
+        console.log(`.exec fn returned: ${returnedFavs}`);
+          res.render('favorites', {user: user, coinIds: returnedFavs[0].favorites});
+      })
+    }
+  })
+});
 
+// View forums
+app.get("/forums", function (req, res) {
+      res.render("forums");
+    });
+
+// Get news
 app.get("/news", function (req, res) {
    console.log(req.user);
    User.find(function(err, users) {

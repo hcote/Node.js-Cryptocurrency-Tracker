@@ -14,7 +14,10 @@
       <ul>
         <li><a class="navLink" href='/'>Home</a></li>
         <li><a class="navLink" href='/portfolio'>Portfolio</a></li>
-        <li><a class="navLink" href='/favorites'>Favorites</a></li>
+        <% if (user == undefined) { %>
+          <%  } else { %>
+        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>Favorites</a></li>
+          <%  } %>
         <li><a class="navLink" href='/forums'>Forums</a></li>
         <li><a class="navLink" href='/news'>News</a></li>
         <% if (user == undefined) { %>
