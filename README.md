@@ -13,6 +13,10 @@ Clone down the repository, run npm install, get the DB going by running mongod i
 # User Stories
 Most similar applications today on the web do a good job at a few things, but there seems to be a lack of one go-to app that has everything you want - so you don't need accounts or to be checking different sites for this information.
 
+# Existing Issues
+* Limited to top 100 currencies on coinmarketcap
+* Each time the home page refreshes, it creates another 100 coins, rather than updating the existing ones in the DB
+
 # Future Development
 * Rather than relying on coinamrketcap's limited (top 100 coins) API data, make API calls to the top exchanges to get their data - then average out their prices
   * Then allow visiters to sort coins by exchange, and see which coins are on which exchanges
