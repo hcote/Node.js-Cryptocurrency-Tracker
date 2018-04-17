@@ -66,6 +66,17 @@ app.get('/', function(req, res) {
     })
    })
 
+// Bittrex API
+app.get('/home', function(req, res) {
+  axios.get('https://bittrex.com/api/v1.1/public/getmarketsummaries')
+    .then(function(response) {
+       console.log(response.data);
+     })
+     .catch(function(err) {
+       console.log(err);
+    })
+   })
+
 // Add favorites
 app.post('/addToFavorites', function(req, res) {
  var userId = req.user._id
