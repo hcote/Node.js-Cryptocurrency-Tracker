@@ -3,6 +3,7 @@ var mongoose = require("mongoose"),
   passportLocalMongoose = require("passport-local-mongoose");
 
 var CoinSchema = new Schema({
+  id: String,
   symbol: String,
   name: String,
   rank: String,

@@ -43,10 +43,24 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// CHECK
+// CHECK - cron npm
 app.get('/', function(req, res) {
   axios.get('https://api.coinmarketcap.com/v1/ticker/')
     .then(function(response) {
+      // for (i = 0; i < response.data.length; i++) {
+      //   Coin.findOneAndUpdate({id: response.data[i].id}, {price_usd: response.data[i].price_usd}, function(err, updated) {
+      //     if (err) {
+      //       console.log(err);
+      //     } else {
+      //       console.log(`updated: ${updated}`);
+      //       console.log('Hello');
+      //     }
+      //     console.log('hello3');
+      //   })
+      //   console.log('hello4');
+      // }
+      // console.log('Hello 2');
+      // res.render('index', {user: req.user, coins: updated})
        Coin.create(response.data, function(err, coinsCreated) {
           if (err) {
            console.log(err);
@@ -67,15 +81,15 @@ app.get('/', function(req, res) {
    })
 
 // Bittrex API
-app.get('/home', function(req, res) {
-  axios.get('https://bittrex.com/api/v1.1/public/getmarketsummaries')
-    .then(function(response) {
-       console.log(response.data);
-     })
-     .catch(function(err) {
-       console.log(err);
-    })
-   })
+// app.get('/home', function(req, res) {
+//   axios.get('https://bittrex.com/api/v1.1/public/getmarketsummaries')
+//     .then(function(response) {
+//        console.log(response.data);
+//      })
+//      .catch(function(err) {
+//        console.log(err);
+//     })
+//    })
 
 // Add favorites
 app.post('/addToFavorites', function(req, res) {
@@ -236,7 +250,7 @@ app.post('/addCoin', function(req, res) {
           percent_change_7d: foundCoin[0].percent_change_7d,
           percent_change_24h: foundCoin[0].percent_change_24h,
           symbol: foundCoin[0].symbol,
-          name: foundCoin[0].name,
+          name: foundCoin[0].id,
           price_usd: foundCoin[0].price_usd,
           price_btc: foundCoin[0].price_btc,
           qty: req.body.qty
@@ -246,7 +260,7 @@ app.post('/addCoin', function(req, res) {
             (`Error saving: ${err}`)
           } else {
             console.log(`newCoin saved: ${newCoin}`);
-            foundUser.portfolio.push(newCoin._id);
+            foundUser.portfolio.push(newCoin.id);
             console.log(`foundUser portfolio: ${foundUser.portfolio}`);
             foundUser.save()
             res.redirect('/')
