@@ -61,19 +61,22 @@ app.get('/', function(req, res) {
       // }
       // console.log('Hello 2');
       // res.render('index', {user: req.user, coins: updated})
-       Coin.create(response.data, function(err, coinsCreated) {
-          if (err) {
-           console.log(err);
-         } else {
-           Coin.find(function(err, allCoins) {
-             if (err) {
-               console.log(err);
-             } else {
-                 res.render('index', {user: req.user, coins: allCoins})
-             }
-           })
-         }
-       })
+
+       // Coin.create(response.data, function(err, coinsCreated) {
+       //    if (err) {
+       //     console.log(err);
+       //   } else {
+       //     Coin.find(function(err, allCoins) {
+       //       if (err) {
+       //         console.log(err);
+       //       } else {
+       //           res.render('index', {user: req.user, coins: allCoins})
+       //       }
+       //     })
+       //   }
+       // })
+       res.render('index', {user: req.user, coins: response.data})
+
      })
      .catch(function(err) {
        console.log(err);

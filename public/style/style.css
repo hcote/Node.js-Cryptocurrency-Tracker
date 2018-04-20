@@ -1,9 +1,14 @@
+html {
+  background: #282828;
+  font-family: 'Source Code Pro'
+}
+
 header {
   text-align: center;
 }
 
 .App-header {
-  background-color: #2f4454;
+  background-color: #190061;
   height: 10em;
   padding: 1em;
   color: white;
@@ -39,8 +44,8 @@ ul {
 }
 
 .navLink:hover {
-  background-color: #DA7B93;
-  box-shadow: 0 0 8px 2px #DA7B93;
+  background-color: #3500D3;
+  box-shadow: 0 0 8px 2px #3500D3;
   list-style-type: none;
   text-decoration: none;
   color: #FFF;
@@ -53,23 +58,26 @@ ul {
  }
 
  .table_head {
-    background-color: #376E6F;
+    background-color: #3500D3;
     box-shadow: 0px 0px 9px 0px #000;
     color: #FFF;
     text-align: center;
     font-weight: 200;
-    border: #376E6F
+    border: #376E6F;
   }
 
  table {
    width: 90%;
    margin: auto;
+   overflow: scroll;
  }
 
  th {
    text-align: center;
    padding: .6em;
-   font-weight: 200
+   font-weight: 200;
+   overflow: scroll;
+
  }
 
  td {
