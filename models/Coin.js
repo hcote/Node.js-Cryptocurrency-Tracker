@@ -1,10 +1,12 @@
 var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
   passportLocalMongoose = require("passport-local-mongoose");
+  var findOrCreate = require('mongoose-findorcreate')
+
 
 var CoinSchema = new Schema({
   id: String,
-  symbol: {type:String, unique:true},
+  symbol: String,
   name: String,
   rank: String,
   price_usd: String,

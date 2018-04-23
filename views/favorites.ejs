@@ -39,7 +39,9 @@
                <th className="tableHeader">Change 1 Day</th>
                <th className="tableHeader">Change 7 Days</th>
             </tr>
-            <% for (i = 0; i < coinIds.length; i++) { %>
+            <% for (index = 0; index < favs.length; index++) { %>
+              <% for (i = 0; i < coinIds.length; i++) { %>
+                <%  if (coinIds[i].symbol === favs[index].symbol) { %>
             <tr>
             <td><%= coinIds[i].rank %> </td>
             <td><%= coinIds[i].name %> </td>
@@ -51,6 +53,8 @@
             <td><%= coinIds[i].percent_change_24h %>%</td>
             <td><%= coinIds[i].percent_change_7d %>%</td>
           </tr>
+              <%    } %>
+            <%    } %>
           <%    } %>
         </tbody>
       </table>

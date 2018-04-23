@@ -11,7 +11,7 @@ var express = require("express"),
   LocalStrategy = require("passport-local").Strategy,
   axios = require('axios');
 
-
+var findOrCreate = require('mongoose-findoneorcreate')
 
 // require Post model
 var db = require("./models"),
@@ -102,15 +102,23 @@ app.post('/addToFavorites', function(req, res) {
      console.log(`Err: ${err}`);
    } else {
      console.log(`Found User: ${foundUser}`);
-     Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
-          if (err) {
-            console.log(`Error finding coin: ${err}`);
-          } else {
-           foundUser.favorites.push(foundCoin[0]._id);
-           foundUser.save()
-           res.redirect('/')
-         }
-       })
+     var newCoin = new Coin(req.body);
+     newCoin.save();
+     console.log('newCoin._id: ' + newCoin._id);
+     foundUser.favorites.push(newCoin._id);
+     foundUser.save()
+     res.redirect('/')
+
+     // Coin.create({symbol: req.body.symbol}, function(err, createdCoin) {
+     //      if (err) {
+     //        console.log(`Error finding coin: ${err}`);
+     //      } else {
+     //        console.log(createdCoin);
+     //       foundUser.favorites.push(createdCoin[0]._id);
+     //       foundUser.save()
+     //       res.redirect('/')
+     //     }
+     //   })
       }
     })
   });
@@ -124,10 +132,17 @@ app.get("/favorites/:id", function (req, res) {
       console.log(err);
     } else {
       User.find()
-      .populate('favorites', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
+      .populate('favorites', 'symbol')
       .exec(function(err, returnedFavs) {
         console.log(`.exec fn returned: ${returnedFavs}`);
-          res.render('favorites', {user: user, coinIds: returnedFavs[0].favorites});
+
+        axios.get('https://api.coinmarketcap.com/v1/ticker/')
+          .then(function(response) {
+            console.log(returnedFavs[0].favorites[0]);
+            console.log(returnedFavs[0].favorites[0].symbol);
+             res.render('favorites', {user: user, coinIds: response.data, favs: returnedFavs[0].favorites})
+           })
+          // res.render('favorites', {user: user, coinIds: returnedFavs[0].favorites});
       })
     }
   })
@@ -183,6 +198,7 @@ app.post("/signup", function (req, res) {
   User.register(new User({ username: req.body.username}), req.body.password,
       function () {
         passport.authenticate("local")(req, res, function() {
+          req.user.save();
           res.redirect(`/user/${req.user._id}`);
       })
     }
