@@ -47,36 +47,7 @@ passport.deserializeUser(User.deserializeUser());
 app.get('/', function(req, res) {
   axios.get('https://api.coinmarketcap.com/v1/ticker/')
     .then(function(response) {
-      // for (i = 0; i < response.data.length; i++) {
-      //   Coin.findOneAndUpdate({id: response.data[i].id}, {price_usd: response.data[i].price_usd}, function(err, updated) {
-      //     if (err) {
-      //       console.log(err);
-      //     } else {
-      //       console.log(`updated: ${updated}`);
-      //       console.log('Hello');
-      //     }
-      //     console.log('hello3');
-      //   })
-      //   console.log('hello4');
-      // }
-      // console.log('Hello 2');
-      // res.render('index', {user: req.user, coins: updated})
-
-       // Coin.create(response.data, function(err, coinsCreated) {
-       //    if (err) {
-       //     console.log(err);
-       //   } else {
-       //     Coin.find(function(err, allCoins) {
-       //       if (err) {
-       //         console.log(err);
-       //       } else {
-       //           res.render('index', {user: req.user, coins: allCoins})
-       //       }
-       //     })
-       //   }
-       // })
        res.render('index', {user: req.user, coins: response.data})
-
      })
      .catch(function(err) {
        console.log(err);
@@ -108,7 +79,9 @@ app.post('/addToFavorites', function(req, res) {
        } else {
          console.log(`Succ: ${succ}`);
          if (succ === null) {
-           var newCoin = new Coin(coinId);
+           var newCoin = new Coin({
+             symbol: req.body.symbol
+           });
            newCoin.save();
            console.log('newCoin._id: ' + newCoin._id);
            foundUser.favorites.push(newCoin._id);
@@ -144,11 +117,92 @@ app.get("/favorites/:id", function (req, res) {
             console.log(returnedFavs[0].favorites[0].symbol);
              res.render('favorites', {user: user, coinIds: response.data, favs: returnedFavs[0].favorites})
            })
-          // res.render('favorites', {user: user, coinIds: returnedFavs[0].favorites});
       })
     }
   })
 });
+
+app.post('/addCoin', function(req, res) {
+  var userId = req.user._id
+  User.findById(userId, function(err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('hello: ' + req.body);
+      Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
+        if  (err) {
+          console.log(`ERROR: ${err}`);
+        } else {
+          console.log(`Succ: ${succ}`);
+          if (succ === null) {
+            var newCoin = new Coin({
+              symbol: req.body.symbol,
+              qty: req.body.qty
+            });
+            newCoin.save();
+            console.log('newCoin._id: ' + newCoin._id);
+            foundUser.portfolio.push(newCoin._id);
+            foundUser.save()
+            res.redirect('/')
+          } else {
+            foundUser.portfolio.push(succ._id);
+            foundUser.save()
+            res.redirect('/')
+          }
+        }
+      })
+      // Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
+      //   console.log(`foundCoin: ${foundCoin[0].name}` );
+      //   console.log(`req.body.symbol: ${req.body.symbol}`);
+      //   var newCoin = new Coin ({
+      //     rank: foundCoin[0].rank,
+      //     market_cap_usd: foundCoin[0].market_cap_usd,
+      //     percent_change_7d: foundCoin[0].percent_change_7d,
+      //     percent_change_24h: foundCoin[0].percent_change_24h,
+      //     symbol: foundCoin[0].symbol,
+      //     name: foundCoin[0].id,
+      //     price_usd: foundCoin[0].price_usd,
+      //     price_btc: foundCoin[0].price_btc,
+      //     qty: req.body.qty
+      //   })
+      //   newCoin.save(function(err, saved) {
+      //     if (err) {
+      //       (`Error saving: ${err}`)
+      //     } else {
+      //       console.log(`newCoin saved: ${newCoin}`);
+      //       foundUser.portfolio.push(newCoin.id);
+      //       console.log(`foundUser portfolio: ${foundUser.portfolio}`);
+      //       foundUser.save()
+      //       res.redirect('/')
+      //     }
+      //   })
+      // })
+    }
+  })
+})
+
+// CHECK
+app.get("/portfolio/:id", function (req, res) {
+  var userId = req.params.id;
+  console.log(userId);
+  User.findById(userId, function(err, user) {
+    if (err) {
+      console.log(err);
+    } else {
+      User.find()
+      .populate('portfolio', 'symbol qty')
+      .exec(function(err, returnedPort) {
+        axios.get('https://api.coinmarketcap.com/v1/ticker/')
+          .then(function(response) {
+            console.log(returnedPort[0].portfolio[0]);
+            console.log(returnedPort[0].portfolio[0].symbol);
+             res.render('portfolio', {user: user, coinIds: response.data, portfolio: returnedPort[0].portfolio})
+      })
+    })
+  }
+})
+});
+
 
 // View forums
 app.get("/forums", function (req, res) {
@@ -255,60 +309,6 @@ app.get('/user/:id/update', function(req, res) {
     }})
 })
 
-app.post('/addCoin', function(req, res) {
-  var userId = req.user._id
-  User.findById(userId, function(err, foundUser) {
-    if (err) {
-      console.log(err);
-    } else {
-      Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
-        // console.log(`foundCoin: ${foundCoin}`);
-        console.log(`foundCoin: ${foundCoin[0].name}` );
-        console.log(`req.body.symbol: ${req.body.symbol}`);
-        var newCoin = new Coin ({
-          rank: foundCoin[0].rank,
-          market_cap_usd: foundCoin[0].market_cap_usd,
-          percent_change_7d: foundCoin[0].percent_change_7d,
-          percent_change_24h: foundCoin[0].percent_change_24h,
-          symbol: foundCoin[0].symbol,
-          name: foundCoin[0].id,
-          price_usd: foundCoin[0].price_usd,
-          price_btc: foundCoin[0].price_btc,
-          qty: req.body.qty
-        })
-        newCoin.save(function(err, saved) {
-          if (err) {
-            (`Error saving: ${err}`)
-          } else {
-            console.log(`newCoin saved: ${newCoin}`);
-            foundUser.portfolio.push(newCoin.id);
-            console.log(`foundUser portfolio: ${foundUser.portfolio}`);
-            foundUser.save()
-            res.redirect('/')
-          }
-        })
-      })
-    }
-  })
-})
-
-// CHECK
-app.get("/portfolio/:id", function (req, res) {
-  var userId = req.params.id;
-  console.log(userId);
-  User.findById(userId, function(err, user) {
-    if (err) {
-      console.log(err);
-    } else {
-      User.find()
-      .populate('portfolio', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
-      .exec(function(err, returnedPort) {
-        console.log(`.exec fn returned: ${returnedPort}`);
-          res.render('portfolio', {user: user, coinIds: returnedPort[0].portfolio});
-      })
-    }
-  })
-});
 
 // SAVE UPDATES FOR USER PROFILE
 app.put('/user/:id', function(req, res) {

@@ -44,7 +44,9 @@
                <th className="tableHeader">Quantity</th>
                <th className="tableHeader">Value</th>
             </tr>
-            <% for (i = 0; i < coinIds.length; i++) { %>
+            <% for (index = 0; index < portfolio.length; index++) { %>
+              <% for (i = 0; i < coinIds.length; i++) { %>
+                <%  if (coinIds[i].symbol === portfolio[index].symbol) { %>
             <tr>
             <td><%= coinIds[i].rank %> </td>
             <td><%= coinIds[i].name %> </td>
@@ -55,13 +57,14 @@
             <td><%= coinIds[i].market_cap_usd %> </td>
             <td><%= coinIds[i].percent_change_24h %>%</td>
             <td><%= coinIds[i].percent_change_7d %>%</td>
-            <td><%= coinIds[i].qty %></td>
-            <td> <%= coinIds[i].qty * coinIds[i].price_usd  %> </td>
+            <td><%= portfolio[index].qty %></td>
+            <td> <%= portfolio[index].qty * coinIds[i].price_usd  %> </td>
           </tr>
           <%    } %>
+        <%    } %>
+      <%    } %>
         </tbody>
       </table>
-      <div id="chart_div" style="width: 900px; height: 500px;"></div>
       <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
       <% } else { %>
       <p>You must sign in to access this feature</p>
@@ -88,29 +91,6 @@
     chart.draw(data, options);
   }
 </script>
-<script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
 
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ['Month', 'Value'],
-      ['Nov',  1000],
-      ['Dec',  1170],
-      ['Jan',  660],
-      ['Feb',  1030],
-      ['March', 1000]
-    ]);
-
-    var options = {
-      title: 'Portfolio Performance',
-      hAxis: {title: 'Month',  titleTextStyle: {color: '#333'}},
-      vAxis: {minValue: 0}
-    };
-
-    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
-</script>
   </body>
 </html>
