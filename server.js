@@ -101,24 +101,26 @@ app.post('/addToFavorites', function(req, res) {
    if (err) {
      console.log(`Err: ${err}`);
    } else {
-     console.log(`Found User: ${foundUser}`);
-     var newCoin = new Coin(req.body);
-     newCoin.save();
-     console.log('newCoin._id: ' + newCoin._id);
-     foundUser.favorites.push(newCoin._id);
-     foundUser.save()
-     res.redirect('/')
-
-     // Coin.create({symbol: req.body.symbol}, function(err, createdCoin) {
-     //      if (err) {
-     //        console.log(`Error finding coin: ${err}`);
-     //      } else {
-     //        console.log(createdCoin);
-     //       foundUser.favorites.push(createdCoin[0]._id);
-     //       foundUser.save()
-     //       res.redirect('/')
-     //     }
-     //   })
+     console.log('hello: ' + req.body);
+     Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
+       if  (err) {
+         console.log(`ERROR: ${err}`);
+       } else {
+         console.log(`Succ: ${succ}`);
+         if (succ === null) {
+           var newCoin = new Coin(coinId);
+           newCoin.save();
+           console.log('newCoin._id: ' + newCoin._id);
+           foundUser.favorites.push(newCoin._id);
+           foundUser.save()
+           res.redirect('/')
+         } else {
+           foundUser.favorites.push(succ._id);
+           foundUser.save()
+           res.redirect('/')
+         }
+       }
+     })
       }
     })
   });

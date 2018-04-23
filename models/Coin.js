@@ -6,7 +6,7 @@ var mongoose = require("mongoose"),
 
 var CoinSchema = new Schema({
   id: String,
-  symbol: String,
+  symbol: {type: String, unique: false},
   name: String,
   rank: String,
   price_usd: String,
