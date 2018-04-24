@@ -11,7 +11,7 @@ var express = require("express"),
   LocalStrategy = require("passport-local").Strategy,
   axios = require('axios');
 
-
+var findOrCreate = require('mongoose-findoneorcreate')
 
 // require Post model
 var db = require("./models"),
@@ -43,23 +43,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// CHECK
+// CHECK - cron npm
 app.get('/', function(req, res) {
   axios.get('https://api.coinmarketcap.com/v1/ticker/')
     .then(function(response) {
-       Coin.create(response.data, function(err, coinsCreated) {
-          if (err) {
-           console.log(err);
-         } else {
-           Coin.find(function(err, allCoins) {
-             if (err) {
-               console.log(err);
-             } else {
-                 res.render('index', {user: req.user, coins: allCoins})
-             }
-           })
-         }
-       })
+      console.log('Home Page Refreshed');
+       res.render('index', {user: req.user, coins: response.data})
      })
      .catch(function(err) {
        console.log(err);
@@ -67,15 +56,15 @@ app.get('/', function(req, res) {
    })
 
 // Bittrex API
-app.get('/home', function(req, res) {
-  axios.get('https://bittrex.com/api/v1.1/public/getmarketsummaries')
-    .then(function(response) {
-       console.log(response.data);
-     })
-     .catch(function(err) {
-       console.log(err);
-    })
-   })
+// app.get('/home', function(req, res) {
+//   axios.get('https://bittrex.com/api/v1.1/public/getmarketsummaries')
+//     .then(function(response) {
+//        console.log(response.data);
+//      })
+//      .catch(function(err) {
+//        console.log(err);
+//     })
+//    })
 
 // Add favorites
 app.post('/addToFavorites', function(req, res) {
@@ -84,16 +73,28 @@ app.post('/addToFavorites', function(req, res) {
    if (err) {
      console.log(`Err: ${err}`);
    } else {
-     console.log(`Found User: ${foundUser}`);
-     Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
-          if (err) {
-            console.log(`Error finding coin: ${err}`);
-          } else {
-           foundUser.favorites.push(foundCoin[0]._id);
+     console.log('hello: ' + req.body);
+     Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
+       if  (err) {
+         console.log(`ERROR: ${err}`);
+       } else {
+         console.log(`Succ: ${succ}`);
+         if (succ === null) {
+           var newCoin = new Coin({
+             symbol: req.body.symbol
+           });
+           newCoin.save();
+           console.log('newCoin._id: ' + newCoin._id);
+           foundUser.favorites.push(newCoin._id);
+           foundUser.save()
+           res.redirect('/')
+         } else {
+           foundUser.favorites.push(succ._id);
            foundUser.save()
            res.redirect('/')
          }
-       })
+       }
+     })
       }
     })
   });
@@ -106,15 +107,74 @@ app.get("/favorites/:id", function (req, res) {
     if (err) {
       console.log(err);
     } else {
-      User.find()
-      .populate('favorites', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
+      console.log('1');
+      User.findById(userId)
+      .populate('favorites', 'symbol')
       .exec(function(err, returnedFavs) {
         console.log(`.exec fn returned: ${returnedFavs}`);
-          res.render('favorites', {user: user, coinIds: returnedFavs[0].favorites});
+
+        axios.get('https://api.coinmarketcap.com/v1/ticker/')
+          .then(function(response) {
+             res.render('favorites', {user: user, coinIds: response.data, favs: returnedFavs.favorites})
+           })
       })
     }
   })
 });
+
+app.post('/addCoin', function(req, res) {
+  var userId = req.user._id
+  User.findById(userId, function(err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('hello: ' + req.body);
+      Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
+        if  (err) {
+          console.log(`ERROR: ${err}`);
+        } else {
+          console.log(`Succ: ${succ}`);
+          if (succ === null) {
+            var newCoin = new Coin({
+              symbol: req.body.symbol,
+              qty: req.body.qty
+            });
+            newCoin.save();
+            console.log('newCoin._id: ' + newCoin._id);
+            foundUser.portfolio.push(newCoin._id);
+            foundUser.save()
+            res.redirect('/')
+          } else {
+            foundUser.portfolio.push(succ._id);
+            foundUser.save()
+            res.redirect('/')
+          }
+        }
+      })
+    }
+  })
+})
+
+// CHECK
+app.get("/portfolio/:id", function (req, res) {
+  var userId = req.params.id;
+  console.log(userId);
+  User.findById(userId, function(err, user) {
+    if (err) {
+      console.log(err);
+    } else {
+      User.find()
+      .populate('portfolio', 'symbol qty')
+      .exec(function(err, returnedPort) {
+        axios.get('https://api.coinmarketcap.com/v1/ticker/')
+          .then(function(response) {
+             res.render('portfolio', {user: user, coinIds: response.data, portfolio: returnedPort.portfolio})
+      })
+    })
+  }
+})
+});
+
 
 // View forums
 app.get("/forums", function (req, res) {
@@ -123,14 +183,7 @@ app.get("/forums", function (req, res) {
 
 // Get news
 app.get("/news", function (req, res) {
-   console.log(req.user);
-   User.find(function(err, users) {
-     if (err) {
-       console.log(err);
-     } else {
-       res.render("news", {user: users});
-     }
-   })
+    res.render("news", {user: req.user});
   });
 
 // Render signup page
@@ -166,6 +219,7 @@ app.post("/signup", function (req, res) {
   User.register(new User({ username: req.body.username}), req.body.password,
       function () {
         passport.authenticate("local")(req, res, function() {
+          req.user.save();
           res.redirect(`/user/${req.user._id}`);
       })
     }
@@ -177,14 +231,16 @@ app.post("/signup", function (req, res) {
 app.get('/user/:id', function(req, res) {
   console.log(userId);
   console.log(req.user);
-  var Id = req.user._id;
+  // var Id = req.user._id;
   var userId = req.params.id;
   User.findById(userId, function(err, succ) {
     if (err) {
       console.log("Error: " + err);
     } else {
       console.log(userId + " " + succ._id);
-      res.render('profile', {user: succ, req: userId, id: Id})
+      res.render('profile', {user: succ, req: userId
+        // , id: Id
+      })
     }})
   })
 
@@ -220,60 +276,6 @@ app.get('/user/:id/update', function(req, res) {
     }})
 })
 
-app.post('/addCoin', function(req, res) {
-  var userId = req.user._id
-  User.findById(userId, function(err, foundUser) {
-    if (err) {
-      console.log(err);
-    } else {
-      Coin.find({symbol: req.body.symbol}, function(err, foundCoin) {
-        // console.log(`foundCoin: ${foundCoin}`);
-        console.log(`foundCoin: ${foundCoin[0].name}` );
-        console.log(`req.body.symbol: ${req.body.symbol}`);
-        var newCoin = new Coin ({
-          rank: foundCoin[0].rank,
-          market_cap_usd: foundCoin[0].market_cap_usd,
-          percent_change_7d: foundCoin[0].percent_change_7d,
-          percent_change_24h: foundCoin[0].percent_change_24h,
-          symbol: foundCoin[0].symbol,
-          name: foundCoin[0].name,
-          price_usd: foundCoin[0].price_usd,
-          price_btc: foundCoin[0].price_btc,
-          qty: req.body.qty
-        })
-        newCoin.save(function(err, saved) {
-          if (err) {
-            (`Error saving: ${err}`)
-          } else {
-            console.log(`newCoin saved: ${newCoin}`);
-            foundUser.portfolio.push(newCoin._id);
-            console.log(`foundUser portfolio: ${foundUser.portfolio}`);
-            foundUser.save()
-            res.redirect('/')
-          }
-        })
-      })
-    }
-  })
-})
-
-// CHECK
-app.get("/portfolio/:id", function (req, res) {
-  var userId = req.params.id;
-  console.log(userId);
-  User.findById(userId, function(err, user) {
-    if (err) {
-      console.log(err);
-    } else {
-      User.find()
-      .populate('portfolio', 'rank name symbol price_btc price_usd market_cap_usd percent_change_7d percent_change_24h qty')
-      .exec(function(err, returnedPort) {
-        console.log(`.exec fn returned: ${returnedPort}`);
-          res.render('portfolio', {user: user, coinIds: returnedPort[0].portfolio});
-      })
-    }
-  })
-});
 
 // SAVE UPDATES FOR USER PROFILE
 app.put('/user/:id', function(req, res) {

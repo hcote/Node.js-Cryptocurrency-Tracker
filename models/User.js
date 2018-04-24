@@ -1,4 +1,4 @@
-var mongoose = require("mongoose"),
+var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   passportLocalMongoose = require("passport-local-mongoose");
 
@@ -14,6 +14,13 @@ var UserSchema = new Schema({
     ref: 'Coin'
   }]
 });
+
+// UserSchema.virtual('portfolio', {
+//   ref: 'Coin',
+//   localField: 'name',
+//   foreignField: 'name',
+//   justOne: false
+// })
 
 UserSchema.plugin(passportLocalMongoose, {usernameUnique: false});
 

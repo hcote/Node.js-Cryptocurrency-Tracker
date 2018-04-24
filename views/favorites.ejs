@@ -3,29 +3,48 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="/style/style.css">
-
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/scripts/app.js" charset="utf-8"></script>
   </head>
+
   <body>
     <header class="App-header">
+
       <div>
-        <h1 class="App-title">BitCheck</h1>
+        <h1 class="crypto_bulls">Crypto Bulls</h1>
+        <img src="bitcoin.png" alt="" class="logo">
       </div>
+      <div class="navigationDiv">
       <ul>
-        <li><a class="navLink" href='/'>Home</a></li>
-        <li><a class="navLink" href='/portfolio'>Portfolio</a></li>
-        <li><a class="navLink" href='/favorites'>Favorites</a></li>
-        <li><a class="navLink" href='/forums'>Forums</a></li>
-        <li><a class="navLink" href='/news'>News</a></li>
-        <% if (user == undefined) { %>
-        <li><a class="navLink" href='/signup'>Sign Up</a></li>
-        <li><a class="navLink" href='/login'>Log In</a></li>
+        <li><a class="navLink" href='/'>&nbsp;Home </a></li><span class="pipe">|</span>
+        <% if (!user) { %>
+        <li><a class="navLink" href='/'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/'>&nbsp;Favorites </a></li><span class="pipe">|</span>
         <%  } else { %>
-        <li><a class="navLink" href='/user/'>Profile</a></li>
-        <li><a class="navLink" href='/logout'>Logout</a></li>
-        <%  } %>      </ul>
+        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>&nbsp;Favorites </a></li><span class="pipe">|</span>
+        <%  } %>
+        <!-- <li><a class="navLink" href='/forums'>Forums</a></li><span> | </span> -->
+        <li><a class="navLink" href='/news'>&nbsp;News </a></li><span class="pipe">|</span>
+        <% if (user == undefined) { %>
+        <li><a class="navLink" href='/signup'>&nbsp;Sign Up </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/login'>&nbsp;Log In</a></li>
+        <%  } else { %>
+        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>&nbsp;Profile </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/logout'>&nbsp;Logout </a></li>
+        <%  } %>
+
+      </ul>
+    </div>
     </header>
     <% if (user) { %>
+      <% if (favs.length < 1) { %>
+        <p>You have no favorites</p>
+          <%  } else { %>
         <table>
           <tbody class="tbl_header">
             <tr class="table_head">
@@ -39,7 +58,9 @@
                <th className="tableHeader">Change 1 Day</th>
                <th className="tableHeader">Change 7 Days</th>
             </tr>
-            <% for (i = 0; i < coinIds.length; i++) { %>
+                  <% for (index = 0; index < favs.length; index++) { %>
+                    <% for (i = 0; i < coinIds.length; i++) { %>
+                      <%  if (coinIds[i].symbol === favs[index].symbol) { %>
             <tr>
             <td><%= coinIds[i].rank %> </td>
             <td><%= coinIds[i].name %> </td>
@@ -51,11 +72,13 @@
             <td><%= coinIds[i].percent_change_24h %>%</td>
             <td><%= coinIds[i].percent_change_7d %>%</td>
           </tr>
-          <%    } %>
+                  <%  } %>
+                <%  } %>
+              <%  } %>
+            <%  } %>
         </tbody>
       </table>
-      <input type="button" name="" value="View Graph" class="table_row">
       <% } else { %>
-      <p>You must sign in to access this feature</p>
+        <p>You must sign in to access this feature</p>
       <% } %>
   </body></html>
