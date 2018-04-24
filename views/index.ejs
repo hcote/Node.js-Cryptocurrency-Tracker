@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="/style/style.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
     <!-- jQuery CDN -->
@@ -14,26 +15,27 @@
     <header class="App-header">
 
       <div>
-        <h1 class="">Crypto Whales</h1>
+        <h1 class="crypto_bulls">Crypto Bulls</h1>
+        <img src="bitcoin.png" alt="" class="logo">
       </div>
-      <div>
+      <div class="navigationDiv">
       <ul>
-        <li><a class="navLink" href='/'>Home</a></li><span> | </span>
+        <li><a class="navLink" href='/'> Home </a></li><span>|</span>
         <% if (user == undefined) { %>
-        <li><a class="navLink" href='/portfolio/>'>Portfolio</a></li><span> | </span>
-        <li><a class="navLink" href='/favorites/>'>Favorites</a></li><span> | </span>
+        <li><a class="navLink" href='/portfolio/>'> Portfolio </a></li><span>|</span>
+        <li><a class="navLink" href='/favorites/>'> Favorites </a></li><span>|</span>
         <%  } else { %>
-        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>Portfolio</a></li><span> | </span>
-        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>Favorites</a></li><span> | </span>
+        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'> Portfolio </a></li><span>|</span>
+        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'> Favorites </a></li><span>|</span>
         <%  } %>
-        <li><a class="navLink" href='/forums'>Forums</a></li><span> | </span>
-        <li><a class="navLink" href='/news'>News</a></li><span> | </span>
+        <!-- <li><a class="navLink" href='/forums'>Forums</a></li><span> | </span> -->
+        <li><a class="navLink" href='/news'> News </a></li><span>|</span>
         <% if (user == undefined) { %>
-        <li><a class="navLink" href='/signup'>Sign Up</a></li><span> | </span>
-        <li><a class="navLink" href='/login'>Log In</a></li>
+        <li><a class="navLink" href='/signup'> Sign Up </a></li><span>|</span>
+        <li><a class="navLink" href='/login'> Log In</a></li>
         <%  } else { %>
-        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>Profile</a></li><span> | </span>
-        <li><a class="navLink" href='/logout'>Logout</a></li>
+        <li><a class="navLink" href='/user/<%= user._id.toString() %>'> Profile </a></li><span>|</span>
+        <li><a class="navLink" href='/logout'> Logout </a></li>
         <%  } %>
 
       </ul>
@@ -41,7 +43,7 @@
     </header>
 <section class="body">
 
-<p><span class="oneday">1 Day</span><span class="sevenday">7 Days</span></p>
+<p class="toggle">Toggle % Change: <span class="oneday">1 Day </span><span> | </span><span class="sevenday"> 7 Days</span></p>
     <table cellspacing="0">
       <tbody class="tbl_header">
         <tr class="table_head">
@@ -52,8 +54,8 @@
            <th class="tableHeader">Price BTC</th>
            <th class="tableHeader">24h Volume</th>
            <th class="tableHeader">Market Cap</th>
-           <th class="tableHeader 1d">% Change 1d</th>
-           <th class="tableHeader 7d hide">% Change 7d</th>
+           <th class="tableHeader 1day">% Change 1d</th>
+           <th class="tableHeader 7day hide">% Change 7d</th>
            <th class="tableHeader">Portfolio</th>
            <th class="tableHeader">Favorite</th>
         </tr>
@@ -77,8 +79,8 @@
          </td>
          <td>
          <form method='POST' action='/addToFavorites'>
-           <span>☆</span>
-           <input type='submit' value='' class="opacity"></input>
+
+           <input type='submit' value='☆'></input>
            <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
          </form>
          </td>
@@ -87,9 +89,32 @@
       </tbody>
     </table>
     </section>
-      <footer>
-          C Hunter Cote
-      </footer>
+    <footer>
+
+      <br>
+    <div class="social"> <span class="contactme">Contact Me</span>
+      <br>
+      <a href="https://www.linkedin.com/in/huntercote/" target="_blank"><i class="fab fa-linkedin" style="font-size:36px; color: white"></i></a>
+      <a href="https://github.com/hcote" target="_blank"><i class="fab fa-github" style="font-size:36px; color: white"></i></a>
+      <a href="mailto:hcote12@gmail.com" target="_blank"><i class="fa fab fa-envelope" style="font-size:36px; color: white"></i></a>
+      <br>
+      <br>
+      <span class="copyright">&#169; Hunter Cote 2018</span>
+      <!-- <a href="https://github.com/hcote" target="_blank"><i class="fab fa-pinterest" style="font-size:36px; color: white"></i></a>
+      <a href="https://github.com/hcote" target="_blank"><i class="fab fa-instagram" style="font-size:36px; color: white"></i></a>
+      <a href="https://github.com/hcote" target="_blank"><i class="fab fa-facebook" style="font-size:36px; color: white"></i></a>
+      <a href="https://github.com/hcote" target="_blank"><i class="fab fa-twitter" style="font-size:36px; color: white"></i></a> -->
+    </div>
+    <br>
+    <!-- <div class="">
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p></p>
+    </div> -->
+
+  </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.js" charset="utf-8"></script>
   </body>
 </html>

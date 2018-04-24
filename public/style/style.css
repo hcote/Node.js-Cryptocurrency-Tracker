@@ -1,14 +1,30 @@
 html {
-  background: radial-gradient(white, white, #282828);
-  font-family: 'Source Code Pro'
+  /* background: radial-gradient(white, #282828, black); */
+  /* background: #282828; */
+  font-family: 'Source Code Pro';
+  margin: 0px;
+  padding: 0px;
 }
 
-.body {
-  padding: 1em;
+body {
+  margin: 0px;
+  padding: 0px;
 }
 
 header {
   text-align: center;
+}
+
+.navigationDiv {
+  width: 100%;
+}
+
+.crypto_bulls {
+  letter-spacing: 5px;
+}
+
+.logo {
+  height: 60px;
 }
 
 .App-header {
@@ -22,13 +38,14 @@ header {
 }
 
 .gray {
-  color: #D3D3D3;
+  color: gray;
 }
 
 li {
   display: inline;
   margin-left: 0;
   margin-right: 0;
+  font-size: 1.3em;
 }
 
 .hide {
@@ -54,7 +71,7 @@ ul {
 
 .navLink:hover {
   background-color: #3500D3;
-  box-shadow: 0 0 8px 2px #3500D3;
+  /* box-shadow: 0 0 8px 2px #3500D3; */
   list-style-type: none;
   text-decoration: none;
   color: #FFF;
@@ -76,8 +93,7 @@ ul {
   }
 
  table {
-   width: 95%;
-   height: 700px;
+   width: 85%;
    margin: auto;
    position: relative;
    overflow: scroll;
@@ -86,7 +102,16 @@ ul {
    border: 1px solid #282828;
  }
 
+.profilepic {
+  height: 150px;
+  margin: auto;
+  border-radius: 10px;
+}
 
+.toggle {
+  margin-right: 8%;
+  float: right;
+}
 
  th {
    text-align: center;
@@ -161,8 +186,43 @@ ul {
 
   footer {
     height: 150px;
-    background: pink;
+    background: #282828;
     margin-top: 1em;
+  }
+
+  .contactme {
+    margin-bottom: .3em;
+  }
+
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red;
+  }
+  .copyright {
+    color: white;
+    margin-top: 1em;
+  }
+
+  .donations {
+    color: white;
+    font-size: .7em;
+    margin-top: -3em;
+    padding-left: .7em;
+  }
+
+  .fab {
+    padding: 0 .5em;
+    margin-top: .3em;
+  }
+
+  .social {
+    text-align: center;
+    color: white;
+    width: 400px;
+    float: right;
   }
 
   .opacity {
