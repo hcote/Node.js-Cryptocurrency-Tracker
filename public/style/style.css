@@ -1,6 +1,7 @@
 html {
   /* background: radial-gradient(white, #282828, black); */
   /* background: #282828; */
+  background: #DCDCDC;
   font-family: 'Source Code Pro';
   margin: 0px;
   padding: 0px;
@@ -13,6 +14,41 @@ body {
 
 header {
   text-align: center;
+}
+
+.flexform {
+  display: flex;
+  flex-direction: row;
+}
+
+.btn {
+  transition-duration: 0.4s;
+  border-radius: 4px;
+}
+
+.btn:hover {
+  background-color: #3500D3;
+  color: white;
+}
+
+.star {
+  transition-duration: 0.4s;
+  width: 36.96px;
+  height: 28.98px;
+  font-size: 1em;
+  border-radius: 4px;
+}
+
+.star:hover {
+  background-color: yellow;
+}
+
+.portfolioInput {
+  width: 35px;
+  height: 25px;
+  border-radius: 4px;
+  border: 1px solid #D3D3D3;
+  margin-right: .6em;
 }
 
 .navigationDiv {
@@ -64,7 +100,7 @@ ul {
   list-style-type: none;
   text-decoration: none;
   color: #FFF;
-  padding: .4em .2em;
+  padding: .4em 0em;
 
   /* box-shadow: 0 0 8px 2px #888; */
 }
@@ -93,13 +129,13 @@ ul {
   }
 
  table {
-   width: 85%;
+   width: 80%;
    margin: auto;
    position: relative;
    overflow: scroll;
    display: block;
    border-radius: 10px;
-   border: 1px solid #282828;
+   /* border: 1px solid #282828; */
  }
 
 .profilepic {
@@ -109,7 +145,7 @@ ul {
 }
 
 .toggle {
-  margin-right: 8%;
+  margin-right: 12%;
   float: right;
 }
 
@@ -124,6 +160,7 @@ ul {
    text-align: center;
    padding: .6em 1em;
    box-sizing: border-box;
+   height: 60px;
  }
 
 
@@ -162,6 +199,8 @@ ul {
     box-shadow: 0 0 8px 2px #d3d3d3;
     padding-bottom: 2em;
     padding-top: 1em;
+    background: white;
+    border-radius: 8px;
   }
 
   .h2 {
@@ -187,7 +226,7 @@ ul {
   footer {
     height: 150px;
     background: #282828;
-    margin-top: 1em;
+    margin-top: 4em;
   }
 
   .contactme {
@@ -204,6 +243,11 @@ ul {
   .copyright {
     color: white;
     margin-top: 1em;
+  }
+
+  .pipe {
+    font-size: 1.5em;
+    font-weight: 200;
   }
 
   .donations {
@@ -227,4 +271,8 @@ ul {
 
   .opacity {
     opacity: 0;
+  }
+
+  @media screen and (max-width: 900px) {
+    
   }

@@ -20,22 +20,22 @@
       </div>
       <div class="navigationDiv">
       <ul>
-        <li><a class="navLink" href='/'> Home </a></li><span>|</span>
-        <% if (user == undefined) { %>
-        <li><a class="navLink" href='/portfolio/>'> Portfolio </a></li><span>|</span>
-        <li><a class="navLink" href='/favorites/>'> Favorites </a></li><span>|</span>
+        <li><a class="navLink" href='/'>&nbsp;Home </a></li><span class="pipe">|</span>
+        <% if (!user) { %>
+        <li><a class="navLink" href='/'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/'>&nbsp;Favorites </a></li><span class="pipe">|</span>
         <%  } else { %>
-        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'> Portfolio </a></li><span>|</span>
-        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'> Favorites </a></li><span>|</span>
+        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>&nbsp;Favorites </a></li><span class="pipe">|</span>
         <%  } %>
         <!-- <li><a class="navLink" href='/forums'>Forums</a></li><span> | </span> -->
-        <li><a class="navLink" href='/news'> News </a></li><span>|</span>
+        <li><a class="navLink" href='/news'>&nbsp;News </a></li><span class="pipe">|</span>
         <% if (user == undefined) { %>
-        <li><a class="navLink" href='/signup'> Sign Up </a></li><span>|</span>
-        <li><a class="navLink" href='/login'> Log In</a></li>
+        <li><a class="navLink" href='/signup'>&nbsp;Sign Up </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/login'>&nbsp;Log In</a></li>
         <%  } else { %>
-        <li><a class="navLink" href='/user/<%= user._id.toString() %>'> Profile </a></li><span>|</span>
-        <li><a class="navLink" href='/logout'> Logout </a></li>
+        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>&nbsp;Profile </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/logout'>&nbsp;Logout </a></li>
         <%  } %>
 
       </ul>
@@ -43,7 +43,7 @@
     </header>
 <section class="body">
 
-<p class="toggle">Toggle % Change: <span class="oneday">1 Day </span><span> | </span><span class="sevenday"> 7 Days</span></p>
+<p class="toggle">Toggle (% Change): <span class="oneday gray">1 Day </span><span> | </span><span class="sevenday"> 7 Days</span></p>
     <table cellspacing="0">
       <tbody class="tbl_header">
         <tr class="table_head">
@@ -71,16 +71,16 @@
           <td class="1d"><%= coin.percent_change_24h %>%</td>
           <td class="7d hide"><%= coin.percent_change_7d %>%</td>
           <td>
-            <form method='POST' action='/addCoin'>
-              <input type='text' name='qty'></input>
-              <input type='submit' class='btn' value='Add'></input>
+            <form method='POST' action='/addCoin' class="flexform">
+              <input type='number' name='qty' class="portfolioInput" autocomplete="off"></input>
+              <input type='submit' class='btn submit' value='Add'></input>
               <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
             </form>
          </td>
          <td>
          <form method='POST' action='/addToFavorites'>
 
-           <input type='submit' value='☆'></input>
+           <input type='submit' value='☆' class="star"></input>
            <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
          </form>
          </td>

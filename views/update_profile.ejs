@@ -1,32 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/scripts/app.js" charset="utf-8"></script>
+  </head>
 
-   <script type="text/javascript" src='/scripts/app.js'></script>
-   <link rel="stylesheet" href="/style/style.css">
+  <body>
+    <header class="App-header">
 
-  <title>Edit Profile</title>
-</head>
-<body>
-  <header class="App-header">
-    <div>
-      <h1 class="App-title">BitCheck</h1>
+      <div>
+        <h1 class="crypto_bulls">Crypto Bulls</h1>
+        <img src="bitcoin.png" alt="" class="logo">
+      </div>
+      <div class="navigationDiv">
+      <ul>
+        <li><a class="navLink" href='/'>&nbsp;Home </a></li><span class="pipe">|</span>
+        <% if (!user) { %>
+        <li><a class="navLink" href='/portfolio/'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/favorites/'>&nbsp;Favorites </a></li><span class="pipe">|</span>
+        <%  } else { %>
+        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>&nbsp;Favorites </a></li><span class="pipe">|</span>
+        <%  } %>
+        <!-- <li><a class="navLink" href='/forums'>Forums</a></li><span> | </span> -->
+        <li><a class="navLink" href='/news'>&nbsp;News </a></li><span class="pipe">|</span>
+        <% if (user == undefined) { %>
+        <li><a class="navLink" href='/signup'>&nbsp;Sign Up </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/login'>&nbsp;Log In</a></li>
+        <%  } else { %>
+        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>&nbsp;Profile </a></li><span class="pipe">|</span>
+        <li><a class="navLink" href='/logout'>&nbsp;Logout </a></li>
+        <%  } %>
+
+      </ul>
     </div>
-    <ul>
-      <li><a class="navLink" href='/'>Home</a></li>
-      <li><a class="navLink" href='/portfolio'>Portfolio</a></li>
-      <li><a class="navLink" href='/favorites'>Favorites</a></li>
-      <li><a class="navLink" href='/forums'>Forums</a></li>
-      <li><a class="navLink" href='/news'>News</a></li>
-      <% if (user.users == undefined) { %>
-      <li><a class="navLink" href='/signup'>Sign Up</a></li>
-      <li><a class="navLink" href='/login'>Log In</a></li>
-      <%  } else { %>
-      <li><a class="navLink" href='/user/<%= user.users.id.toString() %>'>Profile</a></li>
-      <li><a class="navLink" href='/logout'>Logout</a></li>
-      <%  } %>      </ul>
-  </header>
+    </header>
 
         <h2>Update your Profile</h2>
         <br>

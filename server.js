@@ -47,6 +47,7 @@ passport.deserializeUser(User.deserializeUser());
 app.get('/', function(req, res) {
   axios.get('https://api.coinmarketcap.com/v1/ticker/')
     .then(function(response) {
+      console.log('Home Page Refreshed');
        res.render('index', {user: req.user, coins: response.data})
      })
      .catch(function(err) {
@@ -114,8 +115,6 @@ app.get("/favorites/:id", function (req, res) {
 
         axios.get('https://api.coinmarketcap.com/v1/ticker/')
           .then(function(response) {
-            console.log(returnedFavs.favorites[0]);
-            console.log(returnedFavs.favorites[0].symbol);
              res.render('favorites', {user: user, coinIds: response.data, favs: returnedFavs.favorites})
            })
       })
@@ -169,8 +168,6 @@ app.get("/portfolio/:id", function (req, res) {
       .exec(function(err, returnedPort) {
         axios.get('https://api.coinmarketcap.com/v1/ticker/')
           .then(function(response) {
-            console.log(returnedPort.portfolio[0]);
-            console.log(returnedPort.portfolio[0].symbol);
              res.render('portfolio', {user: user, coinIds: response.data, portfolio: returnedPort.portfolio})
       })
     })
@@ -186,14 +183,7 @@ app.get("/forums", function (req, res) {
 
 // Get news
 app.get("/news", function (req, res) {
-   console.log(req.user);
-   User.find(function(err, users) {
-     if (err) {
-       console.log(err);
-     } else {
-       res.render("news", {user: users});
-     }
-   })
+    res.render("news", {user: req.user});
   });
 
 // Render signup page
@@ -241,14 +231,16 @@ app.post("/signup", function (req, res) {
 app.get('/user/:id', function(req, res) {
   console.log(userId);
   console.log(req.user);
-  var Id = req.user._id;
+  // var Id = req.user._id;
   var userId = req.params.id;
   User.findById(userId, function(err, succ) {
     if (err) {
       console.log("Error: " + err);
     } else {
       console.log(userId + " " + succ._id);
-      res.render('profile', {user: succ, req: userId, id: Id})
+      res.render('profile', {user: succ, req: userId
+        // , id: Id
+      })
     }})
   })
 
