@@ -1,6 +1,10 @@
 html {
-  background: #282828;
+  background: radial-gradient(white, white, #282828);
   font-family: 'Source Code Pro'
+}
+
+.body {
+  padding: 1em;
 }
 
 header {
@@ -13,12 +17,22 @@ header {
   padding: 1em;
   color: white;
   margin-bottom: 4.5em;
+  display: flex;
+  flex-direction: row;
+}
+
+.gray {
+  color: #D3D3D3;
 }
 
 li {
   display: inline;
-  margin-left: .4em;
-  margin-right: .4em
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.hide {
+  display: none;
 }
 
 ul {
@@ -33,14 +47,9 @@ ul {
   list-style-type: none;
   text-decoration: none;
   color: #FFF;
-  padding: .25em .7em;
-  box-shadow: 0 0 8px 2px #888;
-}
+  padding: .4em .2em;
 
-.modal-button {
-  list-style-type: none;
-  text-decoration: none;
-  color: #FFF;
+  /* box-shadow: 0 0 8px 2px #888; */
 }
 
 .navLink:hover {
@@ -67,65 +76,31 @@ ul {
   }
 
  table {
-   width: 90%;
+   width: 95%;
+   height: 700px;
    margin: auto;
+   position: relative;
    overflow: scroll;
+   display: block;
+   border-radius: 10px;
+   border: 1px solid #282828;
  }
+
+
 
  th {
    text-align: center;
    padding: .6em;
    font-weight: 200;
    overflow: scroll;
-
  }
 
  td {
    text-align: center;
    padding: .6em 1em;
+   box-sizing: border-box;
  }
 
- /* Modal CSS */
- .modal {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        visibility: hidden;
-        transform: scale(1.1);
-        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-    }
-    .modal-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        padding: 1rem 1.5rem;
-        width: 24rem;
-        border-radius: 0.5rem;
-    }
-    .close-button {
-        float: right;
-        width: 1.5rem;
-        line-height: 1.5rem;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 0.25rem;
-        background-color: lightgray;
-    }
-    .close-button:hover {
-        background-color: darkgray;
-    }
-    .show-modal {
-        opacity: 1;
-        visibility: visible;
-        transform: scale(1.0);
-        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-    }
 
   .bigger_div {
     width: 80%;
@@ -182,4 +157,14 @@ ul {
     color: gray;
     font-size: .5em;
     text-align: left;
+  }
+
+  footer {
+    height: 150px;
+    background: pink;
+    margin-top: 1em;
+  }
+
+  .opacity {
+    opacity: 0;
   }

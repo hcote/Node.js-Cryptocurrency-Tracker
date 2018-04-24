@@ -14,56 +14,60 @@
     <header class="App-header">
 
       <div>
-        <h1 class="">BitCheck</h1>
+        <h1 class="">Crypto Whales</h1>
       </div>
+      <div>
       <ul>
-        <li><a class="navLink" href='/'>Home</a></li>
+        <li><a class="navLink" href='/'>Home</a></li><span> | </span>
         <% if (user == undefined) { %>
-        <li><a class="navLink" href='/portfolio/>'>Portfolio</a></li>
-        <li><a class="navLink" href='/favorites/>'>Favorites</a></li>
+        <li><a class="navLink" href='/portfolio/>'>Portfolio</a></li><span> | </span>
+        <li><a class="navLink" href='/favorites/>'>Favorites</a></li><span> | </span>
         <%  } else { %>
-        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>Portfolio</a></li>
-        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>Favorites</a></li>
+        <li><a class="navLink" href='/portfolio/<%= user._id.toString() %>'>Portfolio</a></li><span> | </span>
+        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>Favorites</a></li><span> | </span>
         <%  } %>
-        <li><a class="navLink" href='/forums'>Forums</a></li>
-        <li><a class="navLink" href='/news'>News</a></li>
+        <li><a class="navLink" href='/forums'>Forums</a></li><span> | </span>
+        <li><a class="navLink" href='/news'>News</a></li><span> | </span>
         <% if (user == undefined) { %>
-        <li><a class="navLink" href='/signup'>Sign Up</a></li>
+        <li><a class="navLink" href='/signup'>Sign Up</a></li><span> | </span>
         <li><a class="navLink" href='/login'>Log In</a></li>
         <%  } else { %>
-        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>Profile</a></li>
+        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>Profile</a></li><span> | </span>
         <li><a class="navLink" href='/logout'>Logout</a></li>
         <%  } %>
 
       </ul>
+    </div>
     </header>
+<section class="body">
 
-    <table>
+<p><span class="oneday">1 Day</span><span class="sevenday">7 Days</span></p>
+    <table cellspacing="0">
       <tbody class="tbl_header">
         <tr class="table_head">
-           <th className="tableHeader">Rank</th>
-           <th className="tableHeader">Name</th>
-           <th className="tableHeader">Symbol</th>
-           <th className="tableHeader">Price $</th>
-           <th className="tableHeader">Price BTC</th>
-           <th className="tableHeader">24h Volume</th>
-           <th className="tableHeader">Market Cap</th>
-           <th className="tableHeader">% Change 1d</th>
-           <th className="tableHeader">% Change 7d</th>
-           <th className="tableHeader">Portfolio</th>
-           <th className="tableHeader">Favorites</th>
+           <th class="tableHeader">Rank</th>
+           <th class="tableHeader">Name</th>
+           <th class="tableHeader">Symbol</th>
+           <th class="tableHeader">Price USD</th>
+           <th class="tableHeader">Price BTC</th>
+           <th class="tableHeader">24h Volume</th>
+           <th class="tableHeader">Market Cap</th>
+           <th class="tableHeader 1d">% Change 1d</th>
+           <th class="tableHeader 7d hide">% Change 7d</th>
+           <th class="tableHeader">Portfolio</th>
+           <th class="tableHeader">Favorite</th>
         </tr>
         <% for (let coin of coins) { %>
         <tr class="table-row">
           <td><%= coin.rank %> </td>
           <td><%= coin.name %> </td>
           <td><%= coin.symbol %> </td>
-          <td><%= coin.price_usd %> </td>
+          <td>$<%= coin.price_usd %> </td>
           <td><%= coin.price_btc %> </td>
           <td></td>
-          <td><%= coin.market_cap_usd %> </td>
-          <td><%= coin.percent_change_24h %>%</td>
-          <td><%= coin.percent_change_7d %>%</td>
+          <td>$<%= coin.market_cap_usd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+          <td class="1d"><%= coin.percent_change_24h %>%</td>
+          <td class="7d hide"><%= coin.percent_change_7d %>%</td>
           <td>
             <form method='POST' action='/addCoin'>
               <input type='text' name='qty'></input>
@@ -73,7 +77,8 @@
          </td>
          <td>
          <form method='POST' action='/addToFavorites'>
-           <input type='submit' class='btn' value='Add'></input>
+           <span>☆</span>
+           <input type='submit' value='' class="opacity"></input>
            <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
          </form>
          </td>
@@ -81,7 +86,10 @@
 <%  } %>
       </tbody>
     </table>
-
+    </section>
+      <footer>
+          C Hunter Cote
+      </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.js" charset="utf-8"></script>
   </body>
 </html>
