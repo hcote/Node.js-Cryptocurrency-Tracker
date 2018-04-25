@@ -129,7 +129,7 @@ ul {
   }
 
  table {
-   width: 80%;
+   width: 100%;
    margin: auto;
    position: relative;
    overflow: scroll;
@@ -274,5 +274,5 @@ ul {
   }
 
   @media screen and (max-width: 900px) {
-    
+
   }
