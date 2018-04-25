@@ -163,11 +163,12 @@ app.get("/portfolio/:id", function (req, res) {
     if (err) {
       console.log(err);
     } else {
-      User.find()
+      User.findById(userId)
       .populate('portfolio', 'symbol qty')
       .exec(function(err, returnedPort) {
         axios.get('https://api.coinmarketcap.com/v1/ticker/')
           .then(function(response) {
+            console.log(returnedPort.portfolio);
              res.render('portfolio', {user: user, coinIds: response.data, portfolio: returnedPort.portfolio})
       })
     })
@@ -175,6 +176,13 @@ app.get("/portfolio/:id", function (req, res) {
 })
 });
 
+app.get('/portfolio', function(req, res) {
+  res.render('portfolio', {user: req.user})
+})
+
+app.get('/favorites', function(req, res) {
+  res.render('favorites', {user: req.user})
+})
 
 // View forums
 app.get("/forums", function (req, res) {
@@ -287,12 +295,7 @@ app.put('/user/:id', function(req, res) {
       console.log("Error: " + err);
     } else {
       console.log("found user " + foundUser);
-      foundUser.username = req.body.username,
-      foundUser.name = req.body.name,
-      foundUser.isLocal = req.body.isLocal,
-      foundUser.age = req.body.age,
-      foundUser.city = req.body.city,
-      foundUser.bio = req.body.bio;
+      foundUser.username = req.body.username;
       foundUser.save(function(err, updatedUserSaved) {
         if (err) {
           console.log(err);
@@ -330,12 +333,13 @@ app.post("/login", passport.authenticate("local"), function (req, res) {
       res.sendStatus(404);
     }
   })
-})
+});
 
 // Logout does not work yet
-app.get("/logout", function (req, res) {
+app.get('/logout', function(req, res){
+  console.log("Logging out");
   req.logout();
-  res.redirect("/");
+  res.redirect('/');
 });
 
 // listen on port 3000

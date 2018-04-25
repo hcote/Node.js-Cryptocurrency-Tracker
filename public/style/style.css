@@ -5,11 +5,13 @@ html {
   font-family: 'Source Code Pro';
   margin: 0px;
   padding: 0px;
+  height: 100%;
 }
 
 body {
   margin: 0px;
   padding: 0px;
+  height: 100%;
 }
 
 header {
@@ -19,6 +21,20 @@ header {
 .flexform {
   display: flex;
   flex-direction: row;
+}
+
+.deleteFav {
+  font-size: .85em;
+  color: red;
+  height: 2.2em;
+  width: 2.7em;
+  border-radius: 4px;
+  transition-duration: 0.4s;
+}
+
+.deleteFav:hover {
+  color: white;
+  background: red;
 }
 
 .btn {
@@ -106,11 +122,14 @@ ul {
 }
 
 .navLink:hover {
-  background-color: #3500D3;
   /* box-shadow: 0 0 8px 2px #3500D3; */
   list-style-type: none;
   text-decoration: none;
-  color: #FFF;
+  color: #D3D3D3;
+}
+
+.cTab {
+  color: #D3D3D3;
 }
 
 /* Table formatting */
@@ -131,10 +150,13 @@ ul {
  table {
    margin-right: auto;
    margin-left: auto;
-   border-radius: 10px;
    text-align: center;
-
+   max-width: 90%;
    /* border: 1px solid #282828; */
+ }
+
+.tbl_header {
+   border-radius: 100px;
  }
 
 .profilepic {
@@ -146,6 +168,7 @@ ul {
 .body {
   display: block;
   overflow: scroll;
+  margin: 0 2em;
 }
 
 .toggle {
@@ -179,6 +202,7 @@ ul {
   .big_div {
     max-width: 80%;
     margin: auto;
+    font-size: .8em;
     font-family: 'Crimson Text'
   }
 
@@ -233,6 +257,10 @@ ul {
     height: 150px;
     background: #282828;
     margin-top: 4em;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
   }
 
   .contactme {
@@ -272,21 +300,33 @@ ul {
     text-align: center;
     color: white;
     width: 400px;
-    float: right;
+    /* float: right; */
+    margin: auto;
   }
 
   .opacity {
     opacity: 0;
   }
 
-  #notUser {
+.paragraph {
+  margin-bottom: -1.5em;
+  padding-left: 1em;
+  font-size: .8em;
+}
+
+  .notUser {
    color: #D3D3D3;
    background: gray;
+   border-radius: 4px;
  }
 
- #notUser2 {
+ .notUser2 {
    color: #D3D3D3;
    background: gray;
+   width: 36.96px;
+   height: 28.98px;
+   font-size: 1em;
+   border-radius: 4px;
  }
 
   @media screen and (max-width: 900px) {
