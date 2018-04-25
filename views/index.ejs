@@ -71,6 +71,7 @@
           <td class="1d"><%= coin.percent_change_24h %>%</td>
           <td class="7d hide"><%= coin.percent_change_7d %>%</td>
           <td>
+
              <form method='POST' action='/addCoin' class="flexform">
                <input type='number' name='qty' class="portfolioInput" autocomplete="off"></input>
                <% if (!user) { %>
@@ -92,6 +93,7 @@
           </form>
           </td>
        </tr>
+
 <%  } %>
       </tbody>
     </table>

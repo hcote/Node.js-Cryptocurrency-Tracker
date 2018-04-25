@@ -60,7 +60,8 @@ header {
 }
 
 .logo {
-  height: 60px;
+  height: 75px;
+  margin-top: -.75em;
 }
 
 .App-header {
@@ -141,6 +142,7 @@ ul {
   height: 150px;
   margin: auto;
   border-radius: 10px;
+  margin-bottom: 2em;
 }
 
 .body {
@@ -159,6 +161,16 @@ ul {
    font-weight: 200;
    overflow: scroll;
    height: 39.78px;
+ }
+
+ #notUser {
+   color: #D3D3D3;
+   background: gray;
+ }
+
+ #notUser2 {
+   color: #D3D3D3;
+   background: gray;
  }
 
  td {
@@ -201,6 +213,7 @@ ul {
 
   .center-align {
     width: 600px;
+    text-align: center;
     margin: auto;
     box-shadow: 0 0 8px 2px #d3d3d3;
     padding-bottom: 2em;
