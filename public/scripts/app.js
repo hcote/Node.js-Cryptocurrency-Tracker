@@ -54,6 +54,10 @@ $('.notUser').on('click', function() {
   alert('Please log in to create your portfolio.')
 })
 
+$('.notUser').on('click', function() {
+  alert('Please log in to create your portfolio.')
+})
+
 $('.notUser2').on('click', function() {
   alert('Please log in to add favorites.')
 })
