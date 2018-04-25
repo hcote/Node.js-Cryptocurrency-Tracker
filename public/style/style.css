@@ -130,12 +130,11 @@ ul {
   }
 
  table {
-   width: 80%;
-   margin: auto;
-   position: relative;
-   overflow: scroll;
-   display: block;
+   margin-right: auto;
+   margin-left: auto;
    border-radius: 10px;
+   text-align: center;
+
    /* border: 1px solid #282828; */
  }
 
@@ -146,9 +145,14 @@ ul {
   margin-bottom: 2em;
 }
 
+.body {
+  display: block;
+  overflow: scroll;
+}
+
 .toggle {
-  margin-right: 12%;
-  float: right;
+  text-align: right;
+  margin-right: 10%;
 }
 
  th {
@@ -156,6 +160,7 @@ ul {
    padding: .6em;
    font-weight: 200;
    overflow: scroll;
+   height: 39.78px;
  }
 
  #notUser {
@@ -180,12 +185,13 @@ ul {
     width: 80%;
     max-width: 800px;
     margin: auto;
+    font-family: 'Crimson Text'
   }
 
   .big_div {
     max-width: 80%;
     margin: auto;
-
+    font-family: 'Crimson Text'
   }
 
   .news_image {
@@ -285,6 +291,16 @@ ul {
   .opacity {
     opacity: 0;
   }
+
+  #notUser {
+   color: #D3D3D3;
+   background: gray;
+ }
+
+ #notUser2 {
+   color: #D3D3D3;
+   background: gray;
+ }
 
   @media screen and (max-width: 900px) {
 
