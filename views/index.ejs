@@ -71,20 +71,27 @@
           <td class="1d"><%= coin.percent_change_24h %>%</td>
           <td class="7d hide"><%= coin.percent_change_7d %>%</td>
           <td>
-            <form method='POST' action='/addCoin' class="flexform">
-              <input type='number' name='qty' class="portfolioInput" autocomplete="off"></input>
-              <input type='submit' class='btn submit' value='Add'></input>
-              <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
-            </form>
-         </td>
-         <td>
-         <form method='POST' action='/addToFavorites'>
-
-           <input type='submit' value='☆' class="star"></input>
-           <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
-         </form>
-         </td>
-      </tr>
+             <form method='POST' action='/addCoin' class="flexform">
+               <input type='number' name='qty' class="portfolioInput" autocomplete="off"></input>
+               <% if (!user) { %>
+               <input type='button' class='btn submit' id="notUser" value='Add'></input>
+               <%  } else { %>
+                 <input type='submit' class='btn submit' value='Add'></input>
+                 <%  }  %>
+               <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
+             </form>
+          </td>
+          <td>
+          <form method='POST' action='/addToFavorites'>
+           <% if (!user) { %>
+             <input type='button' value='☆' class="star" id="notUser2"></input>
+             <%  } else { %>
+            <input type='submit' value='☆' class="star"></input>
+              <%  }  %>
+            <input type='hidden' name='symbol' value='<%= coin.symbol %>'></input>
+          </form>
+          </td>
+       </tr>
 <%  } %>
       </tbody>
     </table>

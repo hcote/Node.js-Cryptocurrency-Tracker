@@ -49,6 +49,12 @@ $('.sevenday').on('click', function() {
   $('.oneday').removeClass('gray');
 })
 
+$('#notUser').on('click', function() {
+  alert('Please log in to create your portfolio.')
+})
 
+$('#notUser2').on('click', function() {
+  alert('Please log in to add favorites.')
+})
 
 });
