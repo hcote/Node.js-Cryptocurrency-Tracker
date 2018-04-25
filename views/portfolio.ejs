@@ -22,7 +22,7 @@
       <ul>
         <li><a class="navLink" href='/'>&nbsp;Home </a></li><span class="pipe">|</span>
         <% if (!user) { %>
-        <li><a class="navLink" href='/portfolio'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+        <li><a class="navLink cTab" href='/portfolio'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
         <li><a class="navLink" href='/favorites'>&nbsp;Favorites </a></li><span class="pipe">|</span>
         <%  } else { %>
         <li><a class="navLink cTab" href='/portfolio/<%= user._id.toString() %>'>&nbsp;Portfolio </a></li><span class="pipe">|</span>

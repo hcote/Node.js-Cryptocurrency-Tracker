@@ -22,6 +22,7 @@ $.ajax({
        <p class="article_footer">${data.publishedAt}</p>
        </a>
        <hr />
+       <br>
        `)
  })
 }
