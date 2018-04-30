@@ -45,7 +45,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // CHECK - cron npm
 app.get('/', function(req, res) {
-  axios.get('https://api.coinmarketcap.com/v1/ticker/')
+  axios.get('https://api.coinmarketcap.com/v1/ticker/?start=0&limit=150')
     .then(function(response) {
       console.log('Home Page Refreshed');
        res.render('index', {user: req.user, coins: response.data})
@@ -55,6 +55,60 @@ app.get('/', function(req, res) {
     })
    })
 
+app.get('/?results=150-299', function(req, res) {
+ axios.get('https://api.coinmarketcap.com/v1/ticker/?start=149&limit=150')
+   .then(function(response) {
+     console.log('Home Page Refreshed');
+      res.render('index', {user: req.user, coins: response.data})
+    })
+    .catch(function(err) {
+      console.log(err);
+   })
+  })
+
+app.get('/?results=300-449', function(req, res) {
+  axios.get('https://api.coinmarketcap.com/v1/ticker/?start=299&limit=150')
+    .then(function(response) {
+      console.log('Home Page Refreshed');
+       res.render('index', {user: req.user, coins: response.data})
+     })
+     .catch(function(err) {
+       console.log(err);
+    })
+   })
+
+app.get('/?results=450-599', function(req, res) {
+ axios.get('https://api.coinmarketcap.com/v1/ticker/?start=449&limit=150')
+   .then(function(response) {
+     console.log('Home Page Refreshed');
+      res.render('index', {user: req.user, coins: response.data})
+    })
+    .catch(function(err) {
+      console.log(err);
+   })
+  })
+
+  app.get('/?results=600-749', function(req, res) {
+   axios.get('https://api.coinmarketcap.com/v1/ticker/?start=599&limit=150')
+     .then(function(response) {
+       console.log('Home Page Refreshed');
+        res.render('index', {user: req.user, coins: response.data})
+      })
+      .catch(function(err) {
+        console.log(err);
+     })
+    })
+
+    app.get('/?results=750-899', function(req, res) {
+     axios.get('https://api.coinmarketcap.com/v1/ticker/?start=749&limit=150')
+       .then(function(response) {
+         console.log('Home Page Refreshed');
+          res.render('index', {user: req.user, coins: response.data})
+        })
+        .catch(function(err) {
+          console.log(err);
+       })
+      })
 // Bittrex API
 // app.get('/home', function(req, res) {
 //   axios.get('https://bittrex.com/api/v1.1/public/getmarketsummaries')
@@ -113,7 +167,7 @@ app.get("/favorites/:id", function (req, res) {
       .exec(function(err, returnedFavs) {
         console.log(`.exec fn returned: ${returnedFavs}`);
 
-        axios.get('https://api.coinmarketcap.com/v1/ticker/')
+        axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
           .then(function(response) {
              res.render('favorites', {user: user, coinIds: response.data, favs: returnedFavs.favorites})
            })
@@ -166,7 +220,7 @@ app.get("/portfolio/:id", function (req, res) {
       User.findById(userId)
       .populate('portfolio', 'symbol qty')
       .exec(function(err, returnedPort) {
-        axios.get('https://api.coinmarketcap.com/v1/ticker/')
+        axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
           .then(function(response) {
             console.log(returnedPort.portfolio);
              res.render('portfolio', {user: user, coinIds: response.data, portfolio: returnedPort.portfolio})
@@ -205,21 +259,21 @@ app.get("/login", function (req, res) {
 });
 
 // View all data in db
-app.get('/all', function(req, res) {
-  User.find(function(err, allUsers) {
-    if (err) {
-      console.log("Error getting all Users: " +  err);
-    } else {
-      Coin.find(function(err, allCoins) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.json({users: allUsers, coins: allCoins})
-        }
-      })
-    }
-  })
-})
+// app.get('/all', function(req, res) {
+//   User.find(function(err, allUsers) {
+//     if (err) {
+//       console.log("Error getting all Users: " +  err);
+//     } else {
+//       Coin.find(function(err, allCoins) {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           res.json({users: allUsers, coins: allCoins})
+//         }
+//       })
+//     }
+//   })
+// })
 
 // Register new user and redirect to profile
 app.post("/signup", function (req, res) {

@@ -15,7 +15,7 @@
     <header class="App-header">
 
       <div>
-        <h1 class="crypto_bulls">Crypto Bulls</h1>
+        <h1 class="crypto_bulls">Crypto Bull</h1>
         <!-- <img src="bitcoin.png" alt="" class="logo"> -->
       </div>
       <div class="navigationDiv">
@@ -72,7 +72,11 @@
             <td>$<%= coinIds[i].price_usd %> </td>
             <td><%= coinIds[i].price_btc %> </td>
             <td>Volume</td>
-            <td><%= coinIds[i].market_cap_usd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+            <% if (coinIds[i].market_cap_usd === null) { %>
+            <td>$0</td>
+        <%  } else { %>
+          <td><%= coinIds[i].market_cap_usd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+        <%  } %>
             <td class="1d"><%= coinIds[i].percent_change_24h %>%</td>
             <td class="7d hide"><%= coinIds[i].percent_change_7d %>%</td>
             <td><%= portfolio[index].qty %></td>
