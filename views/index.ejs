@@ -70,7 +70,7 @@
           <% if (coin.market_cap_usd === null) { %>
           <td>$0</td>
       <%  } else { %>
-          <td>$<%= coin.market_cap_usd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+          <td>$<%= parseFloat(coin.market_cap_usd).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
       <%  } %>
           <td class="1d"><%= coin.percent_change_24h %>%</td>
           <td class="7d hide"><%= coin.percent_change_7d %>%</td>
@@ -79,7 +79,7 @@
              <form method='POST' action='/addCoin' class="flexform">
                <input type='number' name='qty' class="portfolioInput" autocomplete="off"></input>
                <% if (!user) { %>
-               <input type='button' class='notUser' value='Add'></input>
+               <input type='button' class='notUser' value='Add' disabled></input>
                <%  } else { %>
                  <input type='submit' class='btn submit' value='Add'></input>
                  <%  }  %>
@@ -89,7 +89,7 @@
           <td>
           <form method='POST' action='/addToFavorites'>
            <% if (!user) { %>
-             <input type='button' value='☆' class="notUser2"></input>
+             <input type='button' value='☆' class="notUser2" disabled></input>
              <%  } else { %>
             <input type='submit' value='☆' class="star"></input>
               <%  }  %>

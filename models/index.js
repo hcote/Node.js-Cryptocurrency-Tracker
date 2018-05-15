@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var findOrCreate = require('mongoose-findorcreate')
 
 mongoose.Promise = global.Promise;
 /*add you connection somewhere here*/

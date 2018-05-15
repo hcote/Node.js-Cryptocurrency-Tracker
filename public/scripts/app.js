@@ -58,4 +58,12 @@ $('.notUser2').on('click', function() {
   alert('Please log in to add favorites.')
 })
 
+$('.star').each(function(index) {
+  $(this).on('click', function(index) {
+    $(this).addAttr('disabled');
+    $(this).addClass('favorited');
+    console.log('this');
+  })
+})
+
 });

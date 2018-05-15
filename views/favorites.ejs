@@ -59,7 +59,6 @@
                        <th class="tableHeader">Market Cap</th>
                        <th class="tableHeader 1day">% Change 1d</th>
                        <th class="tableHeader 7day hide">% Change 7d</th>
-                       <th class="tableHeader">Portfolio</th>
                        <th class="tableHeader">Remove</th>
                     </tr>
                   <% for (index = 0; index < favs.length; index++) { %>
@@ -75,17 +74,10 @@
             <% if (coinIds[i].market_cap_usd === null) { %>
             <td>$0</td>
         <%  } else { %>
-          <td><%= coinIds[i].market_cap_usd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+          <td><%= parseFloat(coinIds[i].market_cap_usd).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
         <%  } %>
             <td class="1d"><%= coinIds[i].percent_change_24h %>%</td>
             <td class="7d hide"><%= coinIds[i].percent_change_7d %>%</td>
-            <td>
-            <form method='POST' action='/addCoin' class="flexform">
-              <input type='number' name='qty' class="portfolioInput" autocomplete="off"></input>
-                <input type='submit' class='btn submit' value='Add'></input>
-              <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
-            </form>
-          </td>
             <td><input type='submit' value='x' class="deleteFav"></input></td>
           </tr>
                   <%  } %>
@@ -96,8 +88,12 @@
       </table>
       <% } else { %>
         <p>You must sign in to access this feature</p>
+        <div class="footerAlignmentTwo">
+        </div>
       <% } %>
           </section>
+          <div class="footerAlignmentTwo">
+          </div>
           <footer>
 
             <br>

@@ -61,6 +61,9 @@
                <th class="tableHeader 7day hide">Change 7 Days</th>
                <th class="tableHeader">Quantity</th>
                <th class="tableHeader">Value</th>
+               <th class="tableHeader">Edit Amount</th>
+               <th class="tableHeader">Favorite</th>
+               <th class="tableHeader">Remove</th>
             </tr>
                 <% for (index = 0; index < portfolio.length; index++) { %>
                   <% for (i = 0; i < coinIds.length; i++) { %>
@@ -75,12 +78,32 @@
             <% if (coinIds[i].market_cap_usd === null) { %>
             <td>$0</td>
         <%  } else { %>
-          <td><%= coinIds[i].market_cap_usd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+          <td><%= parseFloat(coinIds[i].market_cap_usd).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
         <%  } %>
             <td class="1d"><%= coinIds[i].percent_change_24h %>%</td>
             <td class="7d hide"><%= coinIds[i].percent_change_7d %>%</td>
             <td><%= portfolio[index].qty %></td>
-            <td>$<%= (portfolio[index].qty * coinIds[i].price_usd).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+            <td>$<%= (portfolio[index].qty * parseFloat(coinIds[i].price_usd)).toFixed(2) %> </td>
+            <td>
+              <form method='POST' action='/portfolio/<%= user._id %>?_method=PUT' class="flexform">
+                <input type="number" name="qty" class="portfolioInput" value="">
+                <input type='submit' class='btn' value='Save'></input>
+                <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
+              </form>
+            </td>
+            <td>
+              <form method='POST' action='/addToFavorites'>
+                <input type='submit' value='☆' class="star"></input>
+                <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
+              </form>
+            </td>
+            <td>
+              <form method='POST' action='/removePortCoin' class="flexform">
+                <i class="fa fa-trash"></i>
+                <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
+              </form>
+
+            </td>
           </tr>
             <%    } %>
           <%    } %>
@@ -91,6 +114,8 @@
       <!-- <div id="piechart_3d" style="width: 900px; height: 500px;"></div> -->
       <% } else { %>
       <p>You must sign in to access this feature</p>
+      <div class="footerAlignmentTwo">
+      </div>
       <% } %>
       <!-- <script type="text/javascript">
   google.charts.load("current", {packages:["corechart"]});
@@ -115,6 +140,8 @@
   }
 </script> -->
     </section>
+    <div class="footerAlignmentTwo">
+    </div>
 <footer>
 
   <br>
