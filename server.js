@@ -4,7 +4,6 @@ var express = require("express"),
   bodyParser = require("body-parser"),
   methodOverride = require("method-override"),
   validate = require('express-validator')
-  //  NEW ADDITIONS
   cookieParser = require("cookie-parser"),
   session = require("express-session"),
   passport = require("passport"),
@@ -248,38 +247,38 @@ app.put('/portfolio/:id', function(req, res) {
 
 //
 // Delete from portfolio
-app.post('/removePortCoin', function(req, res) {
-  var userId = req.user._id
-  User.findById(userId, function(err, foundUser) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('hello: ' + req.body);
-      Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
-        if  (err) {
-          console.log(`ERROR: ${err}`);
-        } else {
-          console.log(`Succ: ${succ}`);
-          if (succ === null) {
-            var newCoin = new Coin({
-              symbol: req.body.symbol,
-              qty: req.body.qty
-            });
-            newCoin.save();
-            console.log('newCoin._id: ' + newCoin._id);
-            foundUser.portfolio.push(newCoin._id);
-            foundUser.save()
-            res.redirect('/')
-          } else {
-            foundUser.portfolio.push(succ._id);
-            foundUser.save()
-            res.redirect('/')
-          }
-        }
-      })
-    }
-  })
-})
+// app.post('/removePortCoin', function(req, res) {
+//   var userId = req.user._id
+//   User.findById(userId, function(err, foundUser) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log('hello: ' + req.body);
+//       Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
+//         if  (err) {
+//           console.log(`ERROR: ${err}`);
+//         } else {
+//           console.log(`Succ: ${succ}`);
+//           if (succ === null) {
+//             var newCoin = new Coin({
+//               symbol: req.body.symbol,
+//               qty: req.body.qty
+//             });
+//             newCoin.save();
+//             console.log('newCoin._id: ' + newCoin._id);
+//             foundUser.portfolio.push(newCoin._id);
+//             foundUser.save()
+//             res.redirect('/')
+//           } else {
+//             foundUser.portfolio.push(succ._id);
+//             foundUser.save()
+//             res.redirect('/')
+//           }
+//         }
+//       })
+//     }
+//   })
+// })
 
 // CHECK
 app.get("/portfolio/:id", function (req, res) {
@@ -309,11 +308,6 @@ app.get('/portfolio', function(req, res) {
 app.get('/favorites', function(req, res) {
   res.render('favorites', {user: req.user})
 })
-
-// View forums
-app.get("/forums", function (req, res) {
-      res.render("forums");
-    });
 
 // Get news
 app.get("/news", function (req, res) {
@@ -372,9 +366,7 @@ app.get('/user/:id', function(req, res) {
       console.log("Error: " + err);
     } else {
       console.log(userId + " " + succ._id);
-      res.render('profile', {user: succ, req: userId
-        // , id: Id
-      })
+      res.render('profile', {user: succ, req: userId})
     }})
   })
 
