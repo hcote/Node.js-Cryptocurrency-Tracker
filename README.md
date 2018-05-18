@@ -1,5 +1,5 @@
 ## Hosted on Heroku
-http://www.crypto-bull.herokuapp.com
+https://www.crypto-bull.herokuapp.com
 
 ## Application Features
 This app's goal is to be your go-to if you ever want to check in on the cryptocurrency market. Add currencies to your portfolio or favorites tab, and see how each is doing. Flip to the news tab and see recent and relevant news articles covering the space.
