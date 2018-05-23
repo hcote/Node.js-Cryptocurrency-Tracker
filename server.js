@@ -56,71 +56,6 @@ app.get('/', function(req, res) {
     })
    })
 
-// app.get('/?results=150-299', function(req, res) {
-//  axios.get('https://api.coinmarketcap.com/v1/ticker/?start=149&limit=150')
-//    .then(function(response) {
-//      console.log('Home Page Refreshed');
-//       res.render('index', {user: req.user, coins: response.data})
-//     })
-//     .catch(function(err) {
-//       console.log(err);
-//    })
-//   })
-//
-// app.get('/?results=300-449', function(req, res) {
-//   axios.get('https://api.coinmarketcap.com/v1/ticker/?start=299&limit=150')
-//     .then(function(response) {
-//       console.log('Home Page Refreshed');
-//        res.render('index', {user: req.user, coins: response.data})
-//      })
-//      .catch(function(err) {
-//        console.log(err);
-//     })
-//    })
-//
-// app.get('/?results=450-599', function(req, res) {
-//  axios.get('https://api.coinmarketcap.com/v1/ticker/?start=449&limit=150')
-//    .then(function(response) {
-//      console.log('Home Page Refreshed');
-//       res.render('index', {user: req.user, coins: response.data})
-//     })
-//     .catch(function(err) {
-//       console.log(err);
-//    })
-//   })
-//
-//   app.get('/?results=600-749', function(req, res) {
-//    axios.get('https://api.coinmarketcap.com/v1/ticker/?start=599&limit=150')
-//      .then(function(response) {
-//        console.log('Home Page Refreshed');
-//         res.render('index', {user: req.user, coins: response.data})
-//       })
-//       .catch(function(err) {
-//         console.log(err);
-//      })
-//     })
-//
-//     app.get('/?results=750-899', function(req, res) {
-//      axios.get('https://api.coinmarketcap.com/v1/ticker/?start=749&limit=150')
-//        .then(function(response) {
-//          console.log('Home Page Refreshed');
-//           res.render('index', {user: req.user, coins: response.data})
-//         })
-//         .catch(function(err) {
-//           console.log(err);
-//        })
-//       })
-// Bittrex API
-// app.get('/home', function(req, res) {
-//   axios.get('https://bittrex.com/api/v1.1/public/getmarketsummaries')
-//     .then(function(response) {
-//        console.log(response.data);
-//      })
-//      .catch(function(err) {
-//        console.log(err);
-//     })
-//    })
-
 // Add favorites
 app.post('/addToFavorites', function(req, res) {
  var userId = req.user._id
@@ -167,7 +102,6 @@ app.get("/favorites/:id", function (req, res) {
       .populate('favorites', 'symbol')
       .exec(function(err, returnedFavs) {
         console.log(`.exec fn returned: ${returnedFavs}`);
-
         axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
           .then(function(response) {
              res.render('favorites', {user: user, coinIds: response.data, favs: returnedFavs.favorites})
@@ -245,39 +179,90 @@ app.put('/portfolio/:id', function(req, res) {
   }})
 })
 
-//
 // Delete from portfolio
-// app.post('/removePortCoin', function(req, res) {
-//   var userId = req.user._id
+app.put('/deleteCoin/:id', function(req, res) {
+  console.log("you just tried to delete");
+  var userId = req.params.id;
+  User.findById(userId, function(err, foundUser) {
+    if (err) {
+      console.log("Error: " + err);
+    } else {
+      console.log("found user " + foundUser);
+      Coin.findById(req.body._id, function(err, succ) {
+        console.log(`got coin Id ${req.body._id}`);
+        if  (err) {
+          console.log(`ERROR: ${err}`);
+        } else {
+          console.log(`Succ id: ${succ._id}`);
+          var idToRemove = succ._id
+          console.log(foundUser.portfolio);
+                foundUser.portfolio.find(function(value, index) {
+                  console.log('idToRemove: ' + idToRemove);
+                  console.log(`value._id: ${value}`);
+                  if (value.toString() === idToRemove.toString()) {
+                    console.log('1: ' + foundUser.portfolio);
+                    return foundUser.portfolio.splice(index, 1);
+                    console.log('2: ' + foundUser.portfolio);
+                  }
+                });
+                foundUser.save(function(err, success) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    console.log('user saved & portfolio updated');
+                    User.findById(userId)
+                    .populate('portfolio', 'symbol qty')
+                    .exec(function(err, returnedPort) {
+                      axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
+                        .then(function(response) {
+                          console.log("made it here");
+                        console.log(`new portfolio: ${foundUser.portfolio}`);
+                  res.render('portfolio', {user: foundUser, coinIds: response.data, portfolio: returnedPort.portfolio})
+
+                })
+                })
+            }})
+          }})
+            }})
+          })
+
+
+
+// app.put('/deleteCoin/:id', function(req, res) {
+//   console.log("you just tried to delete");
+//   var userId = req.params.id;
 //   User.findById(userId, function(err, foundUser) {
 //     if (err) {
-//       console.log(err);
+//       console.log("Error: " + err);
 //     } else {
-//       console.log('hello: ' + req.body);
-//       Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
+//       console.log("found user " + foundUser);
+//       Coin.findById(req.body._id, function(err, succ) {
+//         console.log(`got coin Id ${req.body._id}`);
 //         if  (err) {
 //           console.log(`ERROR: ${err}`);
 //         } else {
-//           console.log(`Succ: ${succ}`);
-//           if (succ === null) {
-//             var newCoin = new Coin({
-//               symbol: req.body.symbol,
-//               qty: req.body.qty
-//             });
-//             newCoin.save();
-//             console.log('newCoin._id: ' + newCoin._id);
-//             foundUser.portfolio.push(newCoin._id);
-//             foundUser.save()
-//             res.redirect('/')
-//           } else {
-//             foundUser.portfolio.push(succ._id);
-//             foundUser.save()
-//             res.redirect('/')
-//           }
-//         }
-//       })
-//     }
-//   })
+//           console.log(`Succ id: ${succ._id}`);
+//           var idToRemove = succ._id;
+//               User.findById(userId)
+//               .populate('portfolio', 'symbol qty')
+//               .exec(function(err, returnedPort) {
+//                 axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
+//                   .then(function(response) {
+//                     console.log("made it here");
+//                 returnedPort.portfolio.find(function(value, index) {
+//                   console.log(idToRemove);
+//                   var matchedId = value._id;
+//                   if (matchedId.toString() === idToRemove.toString()) {
+//                     console.log('found a match');
+//                     return returnedPort.portfolio.splice(index, 1)
+//                   }
+//                 });
+//                     console.log(`new portfolio: ${returnedPort.portfolio}`);
+//               res.render('portfolio', {user: foundUser, coinIds: response.data, portfolio: returnedPort.portfolio})
+//             })
+//           })
+//     }})
+//   }})
 // })
 
 // CHECK
@@ -348,7 +333,7 @@ app.post("/signup", function (req, res) {
       function () {
         passport.authenticate("local")(req, res, function() {
           req.user.save();
-          res.redirect(`/user/${req.user._id}`);
+          res.redirect('/');
       })
     }
   )
@@ -444,7 +429,7 @@ app.post("/login", passport.authenticate("local"), function (req, res) {
     console.log("Error is: " + err);
     console.log("Success is: " + succ);
     if(req.body.password) {
-      res.redirect(`/user/${req.user._id}`);
+      res.redirect('/');
     }
     else{
       console.log("error");
