@@ -76,7 +76,7 @@
           <td class="7d hide"><%= coin.percent_change_7d %>%</td>
           <td>
 
-             <form method='POST' action='/addCoin' class="flexform">
+             <form method='POST' action='/addToPortfolio' class="flexform">
                <input type='number' step="0.00001" name='qty' class="portfolioInput" autocomplete="off"></input>
                <% if (!user) { %>
                <input type='button' class='notUser' value='Add' disabled></input>

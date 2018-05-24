@@ -1,4 +1,3 @@
-// require express and other modules
 var express = require("express"),
   app = express(),
   bodyParser = require("body-parser"),
@@ -10,24 +9,19 @@ var express = require("express"),
   LocalStrategy = require("passport-local").Strategy,
   axios = require('axios');
 
-var logout = require('express-passport-logout');
-
-
-// require Post model
+// importing models
 var db = require("./models"),
-  User = db.User,
-  Coin = db.Coin;
-// configure bodyParser (for receiving form data)
-app.use(bodyParser.urlencoded({ extended: true, }));
+    User = db.User,
+    Coin = db.Coin;
 
+// configure bodyParser to read form data
+app.use(bodyParser.urlencoded({ extended: true, }));
 // serve static files from public folder
 app.use(express.static(__dirname + "/public"));
-
 // set view engine to ejs
 app.set("view engine", "ejs");
-
 app.use(methodOverride("_method"));
-
+// ensure user remains logged in throughout session
 app.use(cookieParser());
 app.use(session({
   secret: "thisisasecret",
@@ -44,7 +38,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-// CHECK - cron npm
+// load home page with axios call for data
 app.get('/', function(req, res) {
   axios.get('https://api.coinmarketcap.com/v1/ticker/?start=0&limit=350')
     .then(function(response) {
@@ -52,29 +46,33 @@ app.get('/', function(req, res) {
        res.render('index', {user: req.user, coins: response.data})
      })
      .catch(function(err) {
-       console.log(err);
+       console.log(`Error: ${err}`);
     })
    })
 
-// Add favorites
+// add to favorites
 app.post('/addToFavorites', function(req, res) {
  var userId = req.user._id
+ // find user to add the coin to their favorites
   User.findById(userId, function(err, foundUser) {
    if (err) {
-     console.log(`Err: ${err}`);
+     console.log(`Error: ${err}`);
    } else {
-     console.log('hello: ' + req.body);
+     console.log(`req.body: ${req.body}`);
+    // the submitted form has a hidden input field with the coin's symbol
      Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
-       if  (err) {
-         console.log(`ERROR: ${err}`);
+       if (err) {
+         console.log(`Error: ${err}`);
        } else {
-         console.log(`Succ: ${succ}`);
+         console.log(`Found Coin: ${succ}`);
+         // if the coin we're trying to find doesn't exist, create a new one with the coin's symbol from the form
          if (succ === null) {
            var newCoin = new Coin({
              symbol: req.body.symbol
            });
            newCoin.save();
-           console.log('newCoin._id: ' + newCoin._id);
+           console.log(`newCoin._id: ${newCoin._id}`);
+           // push newCoin's id into user's favorites array
            foundUser.favorites.push(newCoin._id);
            foundUser.save()
            res.redirect('/')
@@ -83,46 +81,50 @@ app.post('/addToFavorites', function(req, res) {
            foundUser.save()
            res.redirect('/')
          }
-       }
-     })
-      }
-    })
-  });
+        }
+      })
+    }
+  })
+});
 
-// Get favorites tab
+// load favorites view
 app.get("/favorites/:id", function (req, res) {
   var userId = req.params.id;
-  console.log(userId);
   User.findById(userId, function(err, user) {
     if (err) {
-      console.log(err);
+      console.log(`Error: ${err}`);
     } else {
-      console.log('1');
+      // find the user and populate the 'symbol' attribute from the 'favorites' id
+      // we pass the success from populate function to our front end
+      // this allows us to retrieve the data from just the stored id reference
       User.findById(userId)
       .populate('favorites', 'symbol')
       .exec(function(err, returnedFavs) {
         console.log(`.exec fn returned: ${returnedFavs}`);
         axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
           .then(function(response) {
+            // passing User, API data & Favorites symbols to the ejs template
              res.render('favorites', {user: user, coinIds: response.data, favs: returnedFavs.favorites})
-           })
-      })
-    }
-  })
-});
+          })
+        })
+      }
+    })
+ });
 
-app.post('/addCoin', function(req, res) {
+// add coin to portfolio (mirrors add coin to favorites)
+app.post('/addToPortfolio', function(req, res) {
   var userId = req.user._id
   User.findById(userId, function(err, foundUser) {
     if (err) {
-      console.log(err);
+      console.log(`Error: ${err}`);
     } else {
-      console.log('hello: ' + req.body);
+      // find coin by symbol from the hidden input field on the form body on ejs template view
       Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
-        if  (err) {
-          console.log(`ERROR: ${err}`);
+        if (err) {
+          console.log(`Error: ${err}`);
         } else {
-          console.log(`Succ: ${succ}`);
+          console.log(`Found Coin: ${succ}`);
+          // if the coin doesn't exist in my db, create it
           if (succ === null) {
             console.log(req.body.qty);
             var newCoin = new Coin({
@@ -130,7 +132,8 @@ app.post('/addCoin', function(req, res) {
               qty: req.body.qty
             });
             newCoin.save();
-            console.log('newCoin._id: ' + newCoin._id);
+            console.log(`newCoin._id: ${newCoin._id}`);
+            // push the coin's _id value into the users portfolio array
             foundUser.portfolio.push(newCoin._id);
             foundUser.save()
             res.redirect('/')
@@ -145,23 +148,22 @@ app.post('/addCoin', function(req, res) {
   })
 })
 
-// Update QTY in portfolio
+// Update coin's quantity in user's portfolio
 app.put('/portfolio/:id', function(req, res) {
-  console.log("Hello, you just tried to update");
   var userId = req.params.id;
   User.findById(userId, function(err, foundUser) {
     if (err) {
-      console.log("Error: " + err);
+      console.log(`Error: ${err}`);
     } else {
-      console.log("found user " + foundUser);
       Coin.findOne({symbol: req.body.symbol}, function(err, succ) {
-        if  (err) {
-          console.log(`ERROR: ${err}`);
+        if (err) {
+          console.log(`Error: ${err}`);
         } else {
+          // updating the found coin's quantity to the quantity submitted on the form
           succ.qty = req.body.qty;
           succ.save(function(err, updateSaved) {
             if (err) {
-              console.log(err);
+              console.log(`Error: ${err}`);
             } else {
               User.findById(userId)
               .populate('portfolio', 'symbol qty')
@@ -179,108 +181,93 @@ app.put('/portfolio/:id', function(req, res) {
   }})
 })
 
-// Delete from portfolio
-app.put('/deleteCoin/:id', function(req, res) {
-  console.log("you just tried to delete");
-  var userId = req.params.id;
+// Remove a coin from portfolio
+app.put('/deleteFromPortfolio', function(req, res) {
+  var userId = req.user._id
   User.findById(userId, function(err, foundUser) {
     if (err) {
       console.log("Error: " + err);
     } else {
-      console.log("found user " + foundUser);
       Coin.findById(req.body._id, function(err, succ) {
-        console.log(`got coin Id ${req.body._id}`);
-        if  (err) {
-          console.log(`ERROR: ${err}`);
+        if (err) {
+          console.log(`Error: ${err}`);
         } else {
-          console.log(`Succ id: ${succ._id}`);
+          console.log(`Coin id: ${succ._id}`);
           var idToRemove = succ._id
-          console.log(foundUser.portfolio);
-                foundUser.portfolio.find(function(value, index) {
-                  console.log('idToRemove: ' + idToRemove);
-                  console.log(`value._id: ${value}`);
-                  if (value.toString() === idToRemove.toString()) {
-                    console.log('1: ' + foundUser.portfolio);
-                    return foundUser.portfolio.splice(index, 1);
-                    console.log('2: ' + foundUser.portfolio);
-                  }
-                });
-                foundUser.save(function(err, success) {
-                  if (err) {
-                    console.log(err);
-                  } else {
-                    console.log('user saved & portfolio updated');
-                    User.findById(userId)
-                    .populate('portfolio', 'symbol qty')
-                    .exec(function(err, returnedPort) {
-                      axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
-                        .then(function(response) {
-                          console.log("made it here");
-                        console.log(`new portfolio: ${foundUser.portfolio}`);
-                  res.render('portfolio', {user: foundUser, coinIds: response.data, portfolio: returnedPort.portfolio})
-
+          // here we have the user & ID of the coin we want to remove
+          // use .find() to iterate through our user's portfolio array
+          // if there's a match, we use .splice() to remove that ID
+          foundUser.portfolio.find(function(value, index) {
+            if (value.toString() === idToRemove.toString()) {
+              return foundUser.portfolio.splice(index, 1);
+            }
+          });
+          // need to save user or else deletion will not work
+          foundUser.save(function(err, success) {
+            if (err) {
+              console.log(`Error: ${err}`);
+            } else {
+              User.findById(userId)
+              .populate('portfolio', 'symbol qty')
+              .exec(function(err, returnedPort) {
+                axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
+                  .then(function(response) {
+                    res.render('portfolio', {user: foundUser, coinIds: response.data, portfolio: returnedPort.portfolio})
+                  })
                 })
-                })
-            }})
-          }})
-            }})
-          })
+              }
+            })
+          }
+        })
+      }
+    })
+  })
 
-// Delete from portfolio
-app.put('/deleteF/:id', function(req, res) {
-console.log("you just tried to delete");
-var userId = req.params.id;
+// Delete from favorites (same as delete from portfolio)
+app.put('/deleteFromFavorites', function(req, res) {
+var userId = req.user._id
 User.findById(userId, function(err, foundUser) {
   if (err) {
-    console.log("Error: " + err);
+      console.log(`Error: ${err}`);
   } else {
-    console.log("found user " + foundUser);
     Coin.findById(req.body._id, function(err, succ) {
-      console.log(`got coin Id ${req.body._id}`);
-      if  (err) {
-        console.log(`ERROR: ${err}`);
+      if (err) {
+        console.log(`Error: ${err}`);
       } else {
-        console.log(`Succ id: ${succ._id}`);
         var idToRemove = succ._id
-        console.log(foundUser.favorites);
-              foundUser.favorites.find(function(value, index) {
-                console.log('idToRemove: ' + idToRemove);
-                console.log(`value._id: ${value}`);
-                if (value.toString() === idToRemove.toString()) {
-                  console.log('1: ' + foundUser.favorites);
-                  return foundUser.favorites.splice(index, 1);
-                  console.log('2: ' + foundUser.favorites);
-                }
-              });
-              foundUser.save(function(err, success) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  console.log('user saved & portfolio updated');
-                  User.findById(userId)
-                  .populate('favorites', 'symbol')
-                  .exec(function(err, returnedFavs) {
-                    axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
-                      .then(function(response) {
-                        console.log("made it here");
-                      console.log(`new portfolio: ${foundUser.favorites}`);
-                res.render('favorites', {user: foundUser, coinIds: response.data, favs: returnedFavs.favorites})
-
+        foundUser.favorites.find(function(value, index) {
+          if (value.toString() === idToRemove.toString()) {
+            return foundUser.favorites.splice(index, 1);
+          }
+        });
+        foundUser.save(function(err, success) {
+          if (err) {
+            console.log(`Error: ${err}`);
+          } else {
+            User.findById(userId)
+            .populate('favorites', 'symbol')
+            .exec(function(err, returnedFavs) {
+              axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
+                .then(function(response) {
+                  res.render('favorites', {user: foundUser, coinIds: response.data, favs: returnedFavs.favorites})
+                })
               })
-              })
-          }})
-        }})
-          }})
-        })
+            }
+          })
+        }
+      })
+    }
+  })
+})
 
 
-// CHECK
+// view user's portfolio
 app.get("/portfolio/:id", function (req, res) {
   var userId = req.params.id;
   console.log(userId);
   User.findById(userId, function(err, user) {
     if (err) {
-      console.log(err);
+      console.log(`Error: ${err}`);
     } else {
       User.findById(userId)
       .populate('portfolio', 'symbol qty')
@@ -289,16 +276,18 @@ app.get("/portfolio/:id", function (req, res) {
           .then(function(response) {
             console.log(returnedPort.portfolio);
              res.render('portfolio', {user: user, coinIds: response.data, portfolio: returnedPort.portfolio})
-      })
-    })
-  }
-})
-});
+           })
+         })
+       }
+     })
+   });
 
+// a user's view if they are not signed in
 app.get('/portfolio', function(req, res) {
   res.render('portfolio', {user: req.user})
 })
 
+// a user's view if they are not signed in
 app.get('/favorites', function(req, res) {
   res.render('favorites', {user: req.user})
 })
@@ -308,17 +297,17 @@ app.get("/news", function (req, res) {
     res.render("news", {user: req.user});
   });
 
-// Render signup page
+// signup page
 app.get("/signup", function (req, res) {
     res.render("signup");
   });
 
-// Render login page
+// login page
 app.get("/login", function (req, res) {
   res.render("login");
 });
 
-// View all data in db
+//view all data in db
 app.get('/all', function(req, res) {
   User.find(function(err, allUsers) {
     if (err) {
@@ -326,7 +315,7 @@ app.get('/all', function(req, res) {
     } else {
       Coin.find(function(err, allCoins) {
         if (err) {
-          console.log(err);
+          console.log(`Error: ${err}`);
         } else {
           res.json({users: allUsers, coins: allCoins})
         }
@@ -343,17 +332,13 @@ app.post("/signup", function (req, res) {
         passport.authenticate("local")(req, res, function() {
           req.user.save();
           res.redirect('/');
-      })
-    }
-  )
-});
+        })
+      }
+    )
+  });
 
-
-// SHOW (user profile) - working
+// user's profile page
 app.get('/user/:id', function(req, res) {
-  console.log(userId);
-  console.log(req.user);
-  // var Id = req.user._id;
   var userId = req.params.id;
   User.findById(userId, function(err, succ) {
     if (err) {
@@ -361,45 +346,45 @@ app.get('/user/:id', function(req, res) {
     } else {
       console.log(userId + " " + succ._id);
       res.render('profile', {user: succ, req: userId})
-    }})
+    }
   })
+})
 
-  // Coin show page
-  app.get('/:symbol', function(req, res) {
-    var coinId = req.params.symbol;
-    Coin.find({symbol: coinId}, function(err, succ) {
-      if (err) {
-        console.log(err);
-      } else {
-        User.find(function(err, users) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(succ);
-            res.render('coin_show', {coin: succ, user: users})
-          }
-        })
-      }
-    })
-  })
+// Coin show page - NOT YET IMPLEMENTED
+// app.get('/:symbol', function(req, res) {
+//   var coinId = req.params.symbol;
+//   Coin.find({symbol: coinId}, function(err, succ) {
+//     if (err) {
+//       console.log(`Error: ${err}`);
+//     } else {
+//       User.find(function(err, users) {
+//         if (err) {
+//           console.log(`Error: ${err}`);
+//         } else {
+//           console.log(succ);
+//           res.render('coin_show', {coin: succ, user: users})
+//         }
+//       })
+//     }
+//   })
+// })
 
-// UPDATE PAGE FOR USER PROFILE
+// page for user to update profile
 app.get('/user/:id/update', function(req, res) {
   var Id = req.user._id;
   var userId = req.params.id;
-  console.log(userId);
   User.findById(userId, function(err, succ) {
     if (err) {
       console.log("Error: " + err);
     } else {
       res.render('update_profile', {user: succ, req: userId, id: Id})
-    }})
+    }
+  })
 })
 
 
-// SAVE UPDATES FOR USER PROFILE
+// save changes to profile update
 app.put('/user/:id', function(req, res) {
-  console.log("Hello, you just tried to update");
   var Id = req.user._id;
   var userId = req.params.id;
   User.findById(userId, function(err, foundUser) {
@@ -410,47 +395,45 @@ app.put('/user/:id', function(req, res) {
       foundUser.username = req.body.username;
       foundUser.save(function(err, updatedUserSaved) {
         if (err) {
-          console.log(err);
+          console.log(`Error: ${err}`);
         } else {
           console.log('User is Saved: ' + updatedUserSaved);
           res.render('profile', {user: updatedUserSaved, req: userId, id: Id})
         }
       })
-    }})
-  })
-
-// DELETE
-app.delete('/user/:id', function(req, res) {
-  console.log(req);
-  User.findByIdAndRemove(req.params.id, function(err, deletedUser) {
-    if (err) {
-      console.log("Error trying to delete profile: " + err);
-    } else {
-    console.log("User Deleted Sucessfully");
-    res.redirect('/');
-  }
+    }
   })
 })
 
-// Login
+// delete user
+app.delete('/user/:id', function(req, res) {
+  User.findByIdAndRemove(req.params.id, function(err, deletedUser) {
+    if (err) {
+      console.log(`Error: ${err}`);
+    } else {
+    console.log("User Deleted Sucessfully");
+    res.redirect('/');
+    }
+  })
+})
+
+// login
 app.post("/login", passport.authenticate("local"), function (req, res) {
   User.findOne({email: req.body.email}, function(err, succ){
-    console.log("Error is: " + err);
-    console.log("Success is: " + succ);
-    if(req.body.password) {
-      res.redirect('/');
-    }
-    else{
-      console.log("error");
-      console.log(err);
-      res.sendStatus(404);
+    if (err) {
+      console.log(`Error: ${err}`);
+    } else {
+      if (req.body.password) {
+        res.redirect('/');
+      } else {
+        res.sendStatus(404);
+      }
     }
   })
 });
 
-// Logout does not work yet
-app.get('/logout', function(req, res){
-  console.log("Logging out");
+// logout (broken)
+app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });

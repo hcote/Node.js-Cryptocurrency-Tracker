@@ -15,13 +15,6 @@ var UserSchema = new Schema({
   }]
 });
 
-// UserSchema.virtual('portfolio', {
-//   ref: 'Coin',
-//   localField: 'name',
-//   foreignField: 'name',
-//   justOne: false
-// })
-
 UserSchema.plugin(passportLocalMongoose, {usernameUnique: false});
 
 var User = mongoose.model("User", UserSchema);
