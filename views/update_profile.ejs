@@ -38,18 +38,20 @@
         </ul>
       </div>
     </header>
-      <h2>Update your Profile</h2>
-      <br>
-      <form action="/user/<%= user._id %>?_method=PUT" method="POST">
-        <div class="col s12">
-          <input type="email" name="username" value="<%= user.username %>">
-        </div>
+    <h2>Update your Profile</h2>
+    <br>
+    <form action="/user/<%= user._id %>?_method=PUT" method="POST">
+      <div class="col s12">
+        <input type="email" name="username" value="<%= user.username %>">
+      </div>
 
-        <div>
-          <input type="submit"value="Update">
-        </div>
-        <br>
-      </form>
+      <div>
+        <input type="submit"value="Update">
+      </div>
+      <br>
+    </form>
+    <div class="footerAlignment">
+    </div>
     <footer>
       <br>
       <div class="social"> <span class="contactme">Contact Me</span>
