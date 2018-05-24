@@ -98,9 +98,9 @@
               </form>
             </td>
             <td>
-              <form method='POST' action='/removePortCoin' class="flexform">
-                <i class="fa fa-trash"></i>
-                <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
+              <form method='POST' action='/deleteCoin/<%= user._id %>?_method=PUT' class="flexform">
+                <input type="submit" value='x' class="deleteFav"></input>
+                <input type='hidden' name='_id' value='<%= portfolio[index]._id %>'></input>
               </form>
 
             </td>
