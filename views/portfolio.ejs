@@ -86,7 +86,7 @@
             <td>$<%= (portfolio[index].qty * parseFloat(coinIds[i].price_usd)).toFixed(2) %> </td>
             <td>
               <form method='POST' action='/portfolio/<%= user._id %>?_method=PUT' class="flexform">
-                <input type="number" name="qty" class="portfolioInput" value="">
+                <input type="number" step="0.00001" name="qty" class="portfolioInput" value="">
                 <input type='submit' class='btn' value='Save'></input>
                 <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
               </form>
@@ -98,7 +98,7 @@
               </form>
             </td>
             <td>
-              <form method='POST' action='/deleteCoin/<%= user._id %>?_method=PUT' class="flexform">
+              <form method='POST' action='/deleteFromPortfolio?_method=PUT' class="flexform">
                 <input type="submit" value='x' class="deleteFav"></input>
                 <input type='hidden' name='_id' value='<%= portfolio[index]._id %>'></input>
               </form>

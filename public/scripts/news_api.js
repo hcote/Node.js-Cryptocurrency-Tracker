@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-console.log(`jQuery hooked up`);
+console.log('jQuery hooked up');
 
 var newsAPI = 'https://newsapi.org/v2/top-headlines?sources=crypto-coins-news&apiKey=2c77471c420d43dc91a377357de30937'
 
@@ -24,9 +24,11 @@ $.ajax({
        <hr />
        <br>
        `)
- })
-}
+     })
+   }
+
  function handleError(err) {
    console.log(err);
  }
+
 })
