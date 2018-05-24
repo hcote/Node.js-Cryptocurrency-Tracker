@@ -1,6 +1,4 @@
 html {
-  /* background: radial-gradient(white, #282828, black); */
-  /* background: #282828; */
   background: #DCDCDC;
   font-family: 'Source Code Pro';
   margin: 0px;
@@ -380,7 +378,3 @@ ul {
    border-radius: 4px;
    opacity: .5;
  }
-
-  @media screen and (max-width: 900px) {
-
-  }

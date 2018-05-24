@@ -1,15 +1,8 @@
 
 $( document ).ready(function() {
-    console.log( "ready!" );
+    console.log("jQuery linked up");
 
-var oneDayChange = parseFloat($('.1d').html());
-var sevenDayChange = parseFloat($('.7d').html());
-var zero = 0;
-console.log(oneDayChange);
-console.log(sevenDayChange);
-
-
-
+// ----------- makes price % change red / green
 $(".1d").each(function(i) {
   if (parseFloat($(this).html()) > 0) {
     $(this).removeClass('red');
@@ -19,7 +12,6 @@ $(".1d").each(function(i) {
     $(this).addClass('red');
     }
 });
-
 
 $(".7d").each(function(i) {
   if (parseFloat($(this).html()) > 0) {
@@ -31,7 +23,7 @@ $(".7d").each(function(i) {
     }
 });
 
-
+// ---------- toggle 1d prices vs 7d
 $('.oneday').on('click', function() {
   $('.7d').addClass('hide');
   $('.1d').removeClass('hide');
@@ -48,22 +40,6 @@ $('.sevenday').on('click', function() {
   $('.7day').removeClass('hide');
   $('.sevenday').addClass('gray');
   $('.oneday').removeClass('gray');
-})
-
-$('.notUser').on('click', function() {
-  alert('Please log in to create your portfolio.')
-})
-
-$('.notUser2').on('click', function() {
-  alert('Please log in to add favorites.')
-})
-
-$('.star').each(function(index) {
-  $(this).on('click', function(index) {
-    $(this).addAttr('disabled');
-    $(this).addClass('favorited');
-    console.log('this');
-  })
 })
 
 });

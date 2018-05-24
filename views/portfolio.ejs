@@ -19,34 +19,32 @@
         <!-- <img src="bitcoin.png" alt="" class="logo"> -->
       </div>
       <div class="navigationDiv">
-      <ul>
-        <li><a class="navLink" href='/'>&nbsp;Home </a></li><span class="pipe">|</span>
-        <% if (!user) { %>
-        <li><a class="navLink cTab" href='/portfolio'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
-        <li><a class="navLink" href='/favorites'>&nbsp;Favorites </a></li><span class="pipe">|</span>
-        <%  } else { %>
-        <li><a class="navLink cTab" href='/portfolio/<%= user._id.toString() %>'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
-        <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>&nbsp;Favorites </a></li><span class="pipe">|</span>
-        <%  } %>
-        <!-- <li><a class="navLink" href='/forums'>Forums</a></li><span> | </span> -->
-        <li><a class="navLink" href='/news'>&nbsp;News </a></li><span class="pipe">|</span>
-        <% if (!user) { %>
-        <li><a class="navLink" href='/signup'>&nbsp;Sign Up </a></li><span class="pipe">|</span>
-        <li><a class="navLink" href='/login'>&nbsp;Log In</a></li>
-        <%  } else { %>
-        <li><a class="navLink" href='/user/<%= user._id.toString() %>'>&nbsp;Profile </a></li><span class="pipe">|</span>
-        <li><a class="navLink" href='/logout'>&nbsp;Logout </a></li>
-        <%  } %>
-
-      </ul>
-    </div>
+        <ul>
+            <li><a class="navLink" href='/'>&nbsp;Home </a></li><span class="pipe">|</span>
+          <% if (!user) { %>
+            <li><a class="navLink cTab" href='/portfolio'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+            <li><a class="navLink" href='/favorites'>&nbsp;Favorites </a></li><span class="pipe">|</span>
+          <%  } else { %>
+            <li><a class="navLink cTab" href='/portfolio/<%= user._id.toString() %>'>&nbsp;Portfolio </a></li><span class="pipe">|</span>
+            <li><a class="navLink" href='/favorites/<%= user._id.toString() %>'>&nbsp;Favorites </a></li><span class="pipe">|</span>
+          <%  } %>
+            <li><a class="navLink" href='/news'>&nbsp;News </a></li><span class="pipe">|</span>
+          <% if (!user) { %>
+            <li><a class="navLink" href='/signup'>&nbsp;Sign Up </a></li><span class="pipe">|</span>
+            <li><a class="navLink" href='/login'>&nbsp;Log In</a></li>
+          <%  } else { %>
+            <li><a class="navLink" href='/user/<%= user._id.toString() %>'>&nbsp;Profile </a></li><span class="pipe">|</span>
+            <li><a class="navLink" href='/logout'>&nbsp;Logout </a></li>
+          <%  } %>
+        </ul>
+      </div>
     </header>
     <section class="body">
     <% if (user) { %>
       <% if (portfolio == undefined) { %>
         <p>You have no items in your portfolio</p>
-          <%  } else { %>
-            <p class="toggle">Toggle (% Change): <span class="oneday gray">1 Day </span><span> | </span><span class="sevenday"> 7 Days</span></p>
+      <%  } else { %>
+        <p class="toggle">Toggle (% Change): <span class="oneday gray">1 Day </span><span> | </span><span class="sevenday"> 7 Days</span></p>
         <table cellspacing="0">
           <tbody class="tbl_header">
             <tr class="table_head">
@@ -65,108 +63,71 @@
                <th class="tableHeader">Favorite</th>
                <th class="tableHeader">Remove</th>
             </tr>
-                <% for (index = 0; index < portfolio.length; index++) { %>
-                  <% for (i = 0; i < coinIds.length; i++) { %>
-                    <%  if (coinIds[i].symbol === portfolio[index].symbol) { %>
-            <tr class="table-row">
-            <td><%= coinIds[i].rank %> </td>
-            <td><%= coinIds[i].name %> </td>
-            <td><%= coinIds[i].symbol %> </td>
-            <td>$<%= coinIds[i].price_usd %> </td>
-            <td><%= coinIds[i].price_btc %> </td>
-            <td>Volume</td>
-            <% if (coinIds[i].market_cap_usd === null) { %>
-            <td>$0</td>
-        <%  } else { %>
-          <td><%= parseFloat(coinIds[i].market_cap_usd).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
-        <%  } %>
-            <td class="1d"><%= coinIds[i].percent_change_24h %>%</td>
-            <td class="7d hide"><%= coinIds[i].percent_change_7d %>%</td>
-            <td><%= portfolio[index].qty %></td>
-            <td>$<%= (portfolio[index].qty * parseFloat(coinIds[i].price_usd)).toFixed(2) %> </td>
-            <td>
-              <form method='POST' action='/portfolio/<%= user._id %>?_method=PUT' class="flexform">
-                <input type="number" name="qty" class="portfolioInput" value="">
-                <input type='submit' class='btn' value='Save'></input>
-                <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
-              </form>
-            </td>
-            <td>
-              <form method='POST' action='/addToFavorites'>
-                <input type='submit' value='☆' class="star"></input>
-                <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
-              </form>
-            </td>
-            <td>
-              <form method='POST' action='/deleteCoin/<%= user._id %>?_method=PUT' class="flexform">
-                <input type="submit" name="" value=""><i class="fa fa-trash"></i></input>
-                <input type='hidden' name='_id' value='<%= portfolio[index]._id %>'></input>
-              </form>
-
-            </td>
-          </tr>
-            <%    } %>
-          <%    } %>
-        <%    } %>
-      <%    } %>
-        </tbody>
-      </table>
-      <!-- <div id="piechart_3d" style="width: 900px; height: 500px;"></div> -->
+            <% for (index = 0; index < portfolio.length; index++) { %>
+              <% for (i = 0; i < coinIds.length; i++) { %>
+                <%  if (coinIds[i].symbol === portfolio[index].symbol) { %>
+                  <tr class="table-row">
+                    <td><%= coinIds[i].rank %> </td>
+                    <td><%= coinIds[i].name %> </td>
+                    <td><%= coinIds[i].symbol %> </td>
+                    <td>$<%= coinIds[i].price_usd %> </td>
+                    <td><%= coinIds[i].price_btc %> </td>
+                    <td>Volume</td>
+                    <% if (coinIds[i].market_cap_usd === null) { %>
+                      <td>$0</td>
+                    <%  } else { %>
+                      <td><%= parseFloat(coinIds[i].market_cap_usd).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") %> </td>
+                    <%  } %>
+                    <td class="1d"><%= coinIds[i].percent_change_24h %>%</td>
+                    <td class="7d hide"><%= coinIds[i].percent_change_7d %>%</td>
+                    <td><%= portfolio[index].qty %></td>
+                    <td>$<%= (portfolio[index].qty * parseFloat(coinIds[i].price_usd)).toFixed(2) %> </td>
+                    <td>
+                      <form method='POST' action='/portfolio/<%= user._id %>?_method=PUT' class="flexform">
+                        <input type="number" step="0.00001" name="qty" class="portfolioInput" value="">
+                        <input type='submit' class='btn' value='Save'></input>
+                        <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
+                      </form>
+                    </td>
+                    <td>
+                      <form method='POST' action='/addToFavorites'>
+                        <input type='submit' value='☆' class="star"></input>
+                        <input type='hidden' name='symbol' value='<%= coinIds[i].symbol %>'></input>
+                      </form>
+                    </td>
+                    <td>
+                      <form method='POST' action='/deleteFromPortfolio?_method=PUT' class="flexform">
+                        <input type="submit" value='x' class="deleteFav"></input>
+                        <input type='hidden' name='_id' value='<%= portfolio[index]._id %>'></input>
+                      </form>
+                    </td>
+                  </tr>
+                <% } %>
+              <% } %>
+            <% } %>
+          <% } %>
+          </tbody>
+        </table>
       <% } else { %>
-      <p>You must sign in to access this feature</p>
-      <div class="footerAlignmentTwo">
-      </div>
+        <p>You must sign in to access this feature</p>
+        <div class="footerAlignmentTwo">
+        </div>
       <% } %>
-      <!-- <script type="text/javascript">
-  google.charts.load("current", {packages:["corechart"]});
-  google.charts.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ['Total Value', 'Percent of Value'],
-      ['NEO',     11],
-      ['Monero',      2],
-      ['Bitcoin',  2],
-      ['0x', 2],
-      ['Ethereum',    7]
-    ]);
-
-    var options = {
-      title: 'Portfolio Breakdown',
-      is3D: true,
-    };
-
-    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-    chart.draw(data, options);
-  }
-</script> -->
     </section>
     <div class="footerAlignmentTwo">
     </div>
-<footer>
-
-  <br>
-<div class="social"> <span class="contactme">Contact Me</span>
-  <br>
-  <a href="https://www.linkedin.com/in/huntercote/" target="_blank"><i class="fab fa-linkedin" style="font-size:36px; color: white"></i></a>
-  <a href="https://github.com/hcote" target="_blank"><i class="fab fa-github" style="font-size:36px; color: white"></i></a>
-  <a href="mailto:hcote12@gmail.com" target="_blank"><i class="fa fab fa-envelope" style="font-size:36px; color: white"></i></a>
-  <br>
-  <br>
-  <span class="copyright">&#169; Hunter Cote 2018</span>
-  <!-- <a href="https://github.com/hcote" target="_blank"><i class="fab fa-pinterest" style="font-size:36px; color: white"></i></a>
-  <a href="https://github.com/hcote" target="_blank"><i class="fab fa-instagram" style="font-size:36px; color: white"></i></a>
-  <a href="https://github.com/hcote" target="_blank"><i class="fab fa-facebook" style="font-size:36px; color: white"></i></a>
-  <a href="https://github.com/hcote" target="_blank"><i class="fab fa-twitter" style="font-size:36px; color: white"></i></a> -->
-</div>
-<br>
-<!-- <div class="">
-  <p></p>
-  <p></p>
-  <p></p>
-  <p></p>
-  <p></p>
-</div> -->
-
-</footer>
+    <footer>
+      <br>
+      <div class="social"> <span class="contactme">Contact Me</span>
+        <br>
+        <a href="https://www.linkedin.com/in/huntercote/" target="_blank"><i class="fab fa-linkedin" style="font-size:36px; color: white"></i></a>
+        <a href="https://github.com/hcote" target="_blank"><i class="fab fa-github" style="font-size:36px; color: white"></i></a>
+        <a href="mailto:hcote12@gmail.com" target="_blank"><i class="fa fab fa-envelope" style="font-size:36px; color: white"></i></a>
+        <br>
+        <br>
+        <span class="copyright">&#169; Hunter Cote 2018</span>
+      </div>
+      <br>
+    </footer>
   </body>
 </html>
