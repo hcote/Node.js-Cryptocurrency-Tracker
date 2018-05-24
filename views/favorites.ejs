@@ -78,7 +78,12 @@
         <%  } %>
             <td class="1d"><%= coinIds[i].percent_change_24h %>%</td>
             <td class="7d hide"><%= coinIds[i].percent_change_7d %>%</td>
-            <td><input type='submit' value='x' class="deleteFav"></input></td>
+            <td>
+              <form method='POST' action='/deleteF/<%= user._id %>?_method=PUT' class="flexform">
+                <input type="submit" value='x' class="deleteFav"></input>
+                <input type='hidden' name='_id' value='<%= favs[index]._id %>'></input>
+              </form>
+            </td>
           </tr>
                   <%  } %>
                 <%  } %>

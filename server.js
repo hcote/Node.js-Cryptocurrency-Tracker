@@ -226,44 +226,53 @@ app.put('/deleteCoin/:id', function(req, res) {
             }})
           })
 
+// Delete from portfolio
+app.put('/deleteF/:id', function(req, res) {
+console.log("you just tried to delete");
+var userId = req.params.id;
+User.findById(userId, function(err, foundUser) {
+  if (err) {
+    console.log("Error: " + err);
+  } else {
+    console.log("found user " + foundUser);
+    Coin.findById(req.body._id, function(err, succ) {
+      console.log(`got coin Id ${req.body._id}`);
+      if  (err) {
+        console.log(`ERROR: ${err}`);
+      } else {
+        console.log(`Succ id: ${succ._id}`);
+        var idToRemove = succ._id
+        console.log(foundUser.favorites);
+              foundUser.favorites.find(function(value, index) {
+                console.log('idToRemove: ' + idToRemove);
+                console.log(`value._id: ${value}`);
+                if (value.toString() === idToRemove.toString()) {
+                  console.log('1: ' + foundUser.favorites);
+                  return foundUser.favorites.splice(index, 1);
+                  console.log('2: ' + foundUser.favorites);
+                }
+              });
+              foundUser.save(function(err, success) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log('user saved & portfolio updated');
+                  User.findById(userId)
+                  .populate('favorites', 'symbol')
+                  .exec(function(err, returnedFavs) {
+                    axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
+                      .then(function(response) {
+                        console.log("made it here");
+                      console.log(`new portfolio: ${foundUser.favorites}`);
+                res.render('favorites', {user: foundUser, coinIds: response.data, favs: returnedFavs.favorites})
 
+              })
+              })
+          }})
+        }})
+          }})
+        })
 
-// app.put('/deleteCoin/:id', function(req, res) {
-//   console.log("you just tried to delete");
-//   var userId = req.params.id;
-//   User.findById(userId, function(err, foundUser) {
-//     if (err) {
-//       console.log("Error: " + err);
-//     } else {
-//       console.log("found user " + foundUser);
-//       Coin.findById(req.body._id, function(err, succ) {
-//         console.log(`got coin Id ${req.body._id}`);
-//         if  (err) {
-//           console.log(`ERROR: ${err}`);
-//         } else {
-//           console.log(`Succ id: ${succ._id}`);
-//           var idToRemove = succ._id;
-//               User.findById(userId)
-//               .populate('portfolio', 'symbol qty')
-//               .exec(function(err, returnedPort) {
-//                 axios.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
-//                   .then(function(response) {
-//                     console.log("made it here");
-//                 returnedPort.portfolio.find(function(value, index) {
-//                   console.log(idToRemove);
-//                   var matchedId = value._id;
-//                   if (matchedId.toString() === idToRemove.toString()) {
-//                     console.log('found a match');
-//                     return returnedPort.portfolio.splice(index, 1)
-//                   }
-//                 });
-//                     console.log(`new portfolio: ${returnedPort.portfolio}`);
-//               res.render('portfolio', {user: foundUser, coinIds: response.data, portfolio: returnedPort.portfolio})
-//             })
-//           })
-//     }})
-//   }})
-// })
 
 // CHECK
 app.get("/portfolio/:id", function (req, res) {
