@@ -350,25 +350,6 @@ app.get('/user/:id', function(req, res) {
   })
 })
 
-// Coin show page - NOT YET IMPLEMENTED
-// app.get('/:symbol', function(req, res) {
-//   var coinId = req.params.symbol;
-//   Coin.find({symbol: coinId}, function(err, succ) {
-//     if (err) {
-//       console.log(`Error: ${err}`);
-//     } else {
-//       User.find(function(err, users) {
-//         if (err) {
-//           console.log(`Error: ${err}`);
-//         } else {
-//           console.log(succ);
-//           res.render('coin_show', {coin: succ, user: users})
-//         }
-//       })
-//     }
-//   })
-// })
-
 // page for user to update profile
 app.get('/user/:id/update', function(req, res) {
   var Id = req.user._id;
