@@ -23,3 +23,5 @@ Clone down the repository, run npm install, get the DB going by running mongod i
 * Trading simulator for interested investors to track pretend investments / portfolio
 * Filter coins (ICO - y/n, privacy coin, ERC20, mineable, hashing algorithm, exchanges it is on)
 * Search bar to find a specific cryptocurrency
+
+<img src="https://user-images.githubusercontent.com/34493689/40591502-5dc665e0-61c7-11e8-80f9-222898b49028.png" alt="img of app" width="800" />
