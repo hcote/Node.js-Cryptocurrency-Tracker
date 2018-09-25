@@ -13,7 +13,7 @@ Clone down the repository, run npm install, get the DB going by running mongod i
 ## Future Development
 * Sort by market cap, price, % change in a day
 * Change time frame between 1d, 7d, 1m, 3m, YTD, 1y
-* Implement pagination on home page
+* Implement pagination
 * View page for each coin with a graph of % price change over time frame
 * Trading simulator for interested investors to track pretend investments / portfolio
 
