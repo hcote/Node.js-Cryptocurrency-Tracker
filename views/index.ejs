@@ -49,7 +49,6 @@
             <th class="tableHeader">Symbol</th>
             <th class="tableHeader">Price USD</th>
             <th class="tableHeader">Price BTC</th>
-            <th class="tableHeader">24h Volume</th>
             <th class="tableHeader">Market Cap</th>
             <th class="tableHeader 1day">% Change 1d</th>
             <th class="tableHeader 7day hide">% Change 7d</th>
@@ -63,7 +62,6 @@
               <td><%= coin.symbol %> </td>
               <td>$<%= coin.price_usd %> </td>
               <td><%= coin.price_btc %> </td>
-              <td></td>
             <% if (coin.market_cap_usd === null) { %>
               <td>$0</td>
             <%  } else { %>

@@ -45,10 +45,11 @@
         <br>
         <div class="flexbox">
           <form action="/user/<%= user._id %>/update" method="GET">
-            <input type="submit" value="Change Email">
+            <input type="submit" class="waves-effect waves-light btn" value="Change Email">
           </form>
+          <span class="spacing"></span>
           <form action="/user/<%= user._id %>?_method=DELETE" method="POST">
-            <input type="submit" value="Delete Profile">
+            <input type="submit" class="waves-effect waves-light btn" value="Delete Profile">
           </form>
         </div>
         <br>

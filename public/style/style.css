@@ -179,9 +179,17 @@ ul {
   height: 39%;
 }
 
+.spacing {
+  width: 10px;
+}
+
+.edit-profile-box {
+  margin-bottom: 15px;
+  font-size: 1em;
+}
+
 .body {
   display: block;
-  overflow: scroll;
   margin: 0 2em;
 }
 
@@ -194,7 +202,6 @@ ul {
    text-align: center;
    padding: .6em;
    font-weight: 200;
-   overflow: scroll;
    height: 39.78px;
  }
 
