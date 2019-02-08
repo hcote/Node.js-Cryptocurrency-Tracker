@@ -188,6 +188,10 @@ ul {
   font-size: 1em;
 }
 
+.input-box {
+  font-size: .8em;
+}
+
 .body {
   display: block;
   margin: 0 2em;
