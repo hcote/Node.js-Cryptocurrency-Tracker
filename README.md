@@ -2,13 +2,13 @@
 https://crypto-bull.herokuapp.com/
 
 ## Application Features
-Track your portfolio or favorite coins, and see how each is doing. Flip to the news tab and see recent and relevant news articles covering the space.
+Track your portfolio or favorite coins and see how each is doing. Flip to the news tab and see recent and relevant news articles covering the space.
 
 ## Technologies Used
 Node.js, Express and MongoDB are used for my backend. I have .ejs files as my frontend template. There is an ajax API call to get the news articles, and an axios API call to coinmarketcap to get my cryptocurrency data.
 
 ## Installation Steps
-Clone down the repository, run npm install, get the DB going by running mongod in the terminal, and in another tab start the server. Go to your localhost:3000 and the app will be set up.
+Clone down the repository, run npm install, get the DB going by running $ mongod in the terminal, and in another tab start the server with the $ nodemon command. Go to your localhost:3000 and the app will be set up.
 
 ## Future Development
 * Sort by market cap, price, % change in a day
